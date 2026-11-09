@@ -1,0 +1,1705 @@
+/* Ágora — datos ficticios de la República de Niki (demo educativa) */
+'use strict';
+
+const MANDATO = {
+  inicio: new Date('2025-12-10T10:00:00-03:00'),
+  fin: new Date('2029-12-10T10:00:00-03:00'),
+  programa: 'Comunidad Primero',
+  agrupacion: 'Movimiento Solidario Nikiense',
+};
+
+const NODOS = [
+  { id: 'salud', nombre: 'Salud', icono: '🩺', color: '#ef5a6f', temas: [
+    { n: 'Hospitales y guardias', k: ['hospital', 'guardia', 'internación', 'cama', 'emergencia médica'] },
+    { n: 'Atención primaria', k: ['salita', 'centro de salud', 'médico de cabecera', 'consultorio'] },
+    { n: 'Medicamentos', k: ['medicamento', 'remedio', 'farmacia', 'receta'] },
+    { n: 'Salud mental', k: ['salud mental', 'psicólogo', 'ansiedad', 'depresión'] },
+    { n: 'Turnos y vacunación', k: ['turno', 'vacuna', 'vacunación', 'espera'] } ] },
+  { id: 'educacion', nombre: 'Educación y Cultura', icono: '📚', color: '#f39a1e', temas: [
+    { n: 'Escuelas', k: ['escuela', 'colegio', 'aula', 'alumno', 'primaria', 'secundaria'] },
+    { n: 'Universidades', k: ['universidad', 'facultad', 'carrera', 'beca'] },
+    { n: 'Docentes', k: ['docente', 'maestro', 'profesor', 'capacitación docente'] },
+    { n: 'Bibliotecas y museos', k: ['biblioteca', 'museo', 'libro', 'archivo'] },
+    { n: 'Cultura y eventos', k: ['cultura', 'teatro', 'música', 'festival', 'cine'] } ] },
+  { id: 'ambiente', nombre: 'Medio Ambiente', icono: '🌿', color: '#3dbb5c', temas: [
+    { n: 'Residuos y reciclaje', k: ['basura', 'residuo', 'reciclaje', 'contenedor', 'basural'] },
+    { n: 'Agua', k: ['agua', 'río', 'contaminación del agua', 'cloaca', 'inundación'] },
+    { n: 'Áreas protegidas', k: ['parque nacional', 'reserva', 'fauna', 'flora', 'humedal'] },
+    { n: 'Calidad del aire', k: ['aire', 'humo', 'smog', 'quema'] },
+    { n: 'Energía limpia', k: ['solar', 'eólica', 'energía renovable', 'panel'] } ] },
+  { id: 'seguridad', nombre: 'Seguridad', icono: '🛡️', color: '#3b7fd9', temas: [
+    { n: 'Prevención del delito', k: ['robo', 'delito', 'inseguridad', 'asalto'] },
+    { n: 'Iluminación y espacio público', k: ['luz', 'iluminación', 'luminaria', 'plaza oscura'] },
+    { n: 'Policía comunitaria', k: ['policía', 'patrullero', 'comisaría'] },
+    { n: 'Seguridad vial', k: ['semáforo', 'accidente', 'tránsito', 'velocidad', 'senda peatonal'] } ] },
+  { id: 'defensa', nombre: 'Defensa', icono: '🛰️', color: '#5d6fa8', temas: [
+    { n: 'Protección civil', k: ['protección civil', 'evacuación', 'simulacro'] },
+    { n: 'Desastres naturales', k: ['terremoto', 'incendio forestal', 'tormenta', 'sequía', 'alerta'] },
+    { n: 'Fronteras', k: ['frontera', 'paso fronterizo', 'límite'] },
+    { n: 'Ciberdefensa', k: ['ciberataque', 'hackeo', 'ciberseguridad'] } ] },
+  { id: 'justicia', nombre: 'Justicia y Derechos Humanos', icono: '⚖️', color: '#8a5cd6', temas: [
+    { n: 'Acceso a la justicia', k: ['juzgado', 'juicio', 'abogado', 'causa', 'demora judicial'] },
+    { n: 'Derechos humanos', k: ['derechos humanos', 'discriminación', 'igualdad'] },
+    { n: 'Sistema penitenciario', k: ['cárcel', 'penitenciario', 'preso', 'reinserción'] },
+    { n: 'Derechos digitales', k: ['datos personales', 'privacidad', 'algoritmo', 'revisión humana'] } ] },
+  { id: 'economia', nombre: 'Asuntos Económicos y Empleo', icono: '💼', color: '#d9a400', temas: [
+    { n: 'Empleo', k: ['trabajo', 'empleo', 'desempleo', 'sueldo', 'salario'] },
+    { n: 'Precios', k: ['precio', 'inflación', 'aumento', 'canasta'] },
+    { n: 'Pymes y comercios', k: ['pyme', 'comercio', 'negocio', 'local'] },
+    { n: 'Impuestos', k: ['impuesto', 'tributo', 'tasa', 'ingresos brutos'] } ] },
+  { id: 'agro', nombre: 'Agricultura y Silvicultura', icono: '🌾', color: '#8bb52a', temas: [
+    { n: 'Producción agrícola', k: ['cosecha', 'cultivo', 'siembra', 'campo'] },
+    { n: 'Bosques', k: ['bosque', 'tala', 'forestación', 'árbol'] },
+    { n: 'Riego', k: ['riego', 'canal', 'represa'] },
+    { n: 'Agricultura familiar', k: ['huerta', 'productor familiar', 'feria', 'cooperativa'] } ] },
+  { id: 'transporte', nombre: 'Transportes y Comunicaciones', icono: '🚆', color: '#13b5c8', temas: [
+    { n: 'Trenes', k: ['tren', 'ferrocarril', 'estación', 'andén', 'vía'] },
+    { n: 'Colectivos', k: ['colectivo', 'bondi', 'parada', 'micro', 'boleto'] },
+    { n: 'Rutas y caminos', k: ['ruta', 'bache', 'camino', 'puente', 'autopista'] },
+    { n: 'Internet y telefonía', k: ['internet', 'señal', 'celular', 'wifi', 'conectividad'] },
+    { n: 'Correo', k: ['correo', 'paquete', 'envío', 'encomienda'] } ] },
+  { id: 'exteriores', nombre: 'Asuntos Exteriores', icono: '🌐', color: '#1f8fd6', temas: [
+    { n: 'Comercio internacional', k: ['exportación', 'importación', 'aduana'] },
+    { n: 'Ciudadanos en el exterior', k: ['consulado', 'pasaporte', 'en el exterior'] },
+    { n: 'Cooperación regional', k: ['tratado', 'cooperación', 'país vecino'] },
+    { n: 'Migraciones', k: ['migrante', 'residencia', 'migración', 'refugiado'] } ] },
+  { id: 'social', nombre: 'Desarrollo Social', icono: '🤝', color: '#ff7a59', temas: [
+    { n: 'Vivienda', k: ['vivienda', 'casa', 'alquiler', 'barrio'] },
+    { n: 'Niñez y adolescencia', k: ['niño', 'niña', 'adolescente', 'infancia'] },
+    { n: 'Personas mayores', k: ['jubilado', 'adulto mayor', 'jubilación', 'geriátrico'] },
+    { n: 'Discapacidad', k: ['discapacidad', 'accesibilidad', 'rampa', 'silla de ruedas'] },
+    { n: 'Alimentación', k: ['comedor', 'alimento', 'merendero', 'hambre'] } ] },
+];
+
+/* 13 provincias. poly = silueta en el mapa con forma de casco (viewBox 0 0 560 440) */
+const PROVINCIAS = [
+  { id: 'lumina', nombre: 'Lumina', tipo: 'Distrito Capital', capital: 'Lumen', poblacion: 3120000, color: '#f5c518',
+    lema: 'Distrito de la luz: en su capital, Lumen, sesionan el Plenario de Nodos y el Tribunal Superior de Evanescence.',
+    localidades: ['Lumen', 'Puerto Lumen', 'Barrio Prisma', 'Altos de Lumina', 'Villa Faro'],
+    poly: '178,183 238,142 300,157 325,280 245,310 145,245', lbl: [245, 215] },
+  { id: 'senna', nombre: 'Senna', capital: 'Stones', poblacion: 2050000, color: '#FF922E',
+    lema: 'El corazón agrícola de Niki, junto a la capital.',
+    localidades: ['Stones', 'Trigales', 'Cruz del Viento', 'General Espiga', 'Laguna Larga'],
+    poly: '325,280 372,243 450,213 448,310 375,350', lbl: [395, 285] },
+  { id: 'lauda', nombre: 'Lauda', capital: 'Lennon', poblacion: 520000, color: '#2fc4bd',
+    lema: 'Cumbres nevadas, pasos de montaña y energía de deshielo.',
+    localidades: ['Lennon', 'Paso Alto', 'Valle Blanco'],
+    poly: '75,93 98,63 150,35 235,17 238,142 178,183', lbl: [170, 90] },
+  { id: 'vettel', nombre: 'Vettel', capital: 'Sade', poblacion: 870000, color: '#6cc24b',
+    lema: 'Viñedos, frutales y oasis al pie de la montaña.',
+    localidades: ['Sade', 'Viñas del Valle', 'Los Sauces', 'Agua Clara'],
+    poly: '235,17 352,45 350,117 300,157 238,142', lbl: [292, 85] },
+  { id: 'rosberg', nombre: 'Rosberg', capital: 'Abbey', poblacion: 980000, color: '#2bb5e0',
+    lema: 'Tierra de amaneceres, yerbales y ríos anchos.',
+    localidades: ['Abbey', 'San Brisa', 'Puerto Albor', 'Colonia Alba'],
+    poly: '352,45 410,73 432,105 448,133 420,173 350,117', lbl: [398, 110] },
+  { id: 'verstappen', nombre: 'Verstappen', capital: 'Floyd', poblacion: 1610000, color: '#3b7fd9',
+    lema: 'La visera del casco: puertos, playas y pesca artesanal.',
+    localidades: ['Floyd', 'Bahía Azul', 'Punta Gaviota', 'Médanos'],
+    poly: '448,133 495,150 532,157 548,185 538,217 510,227 496,233 450,213 420,173', lbl: [488, 188] },
+  { id: 'russell', nombre: 'Russell', capital: 'Spiro', poblacion: 1460000, color: '#16b39a',
+    lema: 'Sierras, turismo y universidades.',
+    localidades: ['Spiro', 'Cumbres', 'La Quebrada', 'Dique Azul'],
+    poly: '300,157 350,117 420,173 450,213 372,243 325,280', lbl: [362, 192] },
+  { id: 'piastri', nombre: 'Piastri', capital: 'Dreams', poblacion: 1240000, color: '#3dbb7a',
+    lema: 'Cascadas, selva húmeda y ríos turquesa.',
+    localidades: ['Dreams', 'Río Verdeagua', 'Cascadas', 'Monte Lapacho'],
+    poly: '450,213 496,233 492,250 510,295 525,360 505,380 448,310', lbl: [484, 290] },
+  { id: 'ricciardo', nombre: 'Ricciardo', capital: 'Cohen', poblacion: 310000, color: '#ef6f8a',
+    lema: 'Arrecifes, bahías y comunidades isleñas.',
+    localidades: ['Cohen', 'Coralina', 'Faro Sur'],
+    poly: '375,350 448,310 505,380 450,410 372,423', lbl: [432, 378] },
+  { id: 'raikkonen', nombre: 'Räikkönen', capital: 'Bowie', poblacion: 1130000, color: '#8a7fe0',
+    lema: 'Ríos, canales y transporte fluvial.',
+    localidades: ['Bowie', 'Islas del Delta', 'Puerto Junco', 'Arroyo Manso'],
+    poly: '245,310 325,280 375,350 372,423 235,413', lbl: [305, 365] },
+  { id: 'alonso', nombre: 'Alonso', capital: 'Morrison', poblacion: 950000, color: '#a8c93a',
+    lema: 'Lagunas rosadas, molinos y ganadería.',
+    localidades: ['Morrison', 'Laguna Rosada', 'Molinos', 'Santa Pradera'],
+    poly: '145,245 245,310 235,413 110,403', lbl: [180, 340] },
+  { id: 'fangio', nombre: 'Fangio', capital: 'Osbourne', poblacion: 410000, color: '#4fae5a',
+    lema: 'Glaciares, estepa y viento.',
+    localidades: ['Osbourne', 'Puerto Glaciar', 'Estepa', 'Bahía Final'],
+    poly: '15,250 145,245 110,403 50,400 20,335', lbl: [72, 305] },
+  { id: 'schumacher', nombre: 'Schumacher', capital: 'Clapton', poblacion: 690000, color: '#4cb8ea',
+    lema: 'Salares y los parques solares más grandes del país.',
+    localidades: ['Clapton', 'Salinas', 'Pueblo Cóndor', 'Tres Cerros'],
+    poly: '75,93 178,183 145,245 15,250 20,165 40,125', lbl: [92, 190] },
+];
+const SILUETA = '75,93 98,63 150,35 235,17 352,45 410,73 432,105 448,133 495,150 532,157 548,185 538,217 510,227 496,233 492,250 510,295 525,360 505,380 450,410 372,423 235,413 110,403 50,400 20,335 15,250 20,165 40,125';
+const CAPITAL_XY = [245, 262];
+
+const NOMBRES = ['Lucía', 'Mateo', 'Valentina', 'Benjamín', 'Camila', 'Joaquín', 'Martina', 'Tomás', 'Sofía', 'Santiago', 'Julieta', 'Facundo', 'Abril', 'Nicolás', 'Mía', 'Thiago', 'Renata', 'Lautaro', 'Catalina', 'Bruno', 'Agustina', 'Ignacio', 'Florencia', 'Emilia', 'Ramiro', 'Paula', 'Gael', 'Malena'];
+const APELLIDOS = ['Ferreyra', 'Quiroga', 'Benítez', 'Sosa', 'Aguirre', 'Medina', 'Ríos', 'Paz', 'Correa', 'Villalba', 'Ledesma', 'Ponce', 'Olmedo', 'Acosta', 'Godoy', 'Vera', 'Luna', 'Cabrera', 'Ojeda', 'Funes', 'Arce', 'Salas', 'Torres', 'Maidana'];
+
+/* Iniciativas modelo por nodo: t = índice de tema. {loc} = localidad, {prov} = provincia */
+const PROPUESTAS_MODELO = {
+  salud: [
+    { t: 0, ti: 'Guardia pediátrica las 24 horas en {loc}', cu: 'Hoy la guardia pediátrica más cercana está a más de una hora. Proponemos que el hospital de {loc} tenga pediatra de guardia todos los días.' },
+    { t: 4, ti: 'Turnos por teléfono y en ventanilla, no solo por la app', cu: 'Muchas personas mayores no pueden sacar turno en línea. Pedimos un número gratuito y una ventanilla presencial en cada centro de salud.' },
+    { t: 3, ti: 'Equipos de salud mental en las escuelas secundarias', cu: 'Proponemos que cada escuela secundaria de {prov} tenga un equipo con psicólogo al menos dos días por semana.' },
+    { t: 2, ti: 'Farmacia pública con medicamentos esenciales', cu: 'Una farmacia estatal en {loc} que entregue medicamentos esenciales a bajo costo con receta del sistema público.' },
+  ],
+  educacion: [
+    { t: 3, ti: 'Biblioteca pública abierta hasta las 22 h', cu: 'Estudiantes que trabajan no llegan a usar la biblioteca de {loc}. Proponemos extender el horario de lunes a viernes.' },
+    { t: 0, ti: 'Calefacción y mantenimiento de las escuelas antes del invierno', cu: 'Varias escuelas de {loc} empiezan el invierno con estufas rotas. Pedimos un plan de revisión cada marzo.' },
+    { t: 4, ti: 'Festival de música joven de {prov}', cu: 'Un festival anual y gratuito con bandas locales menores de 25 años, rotando entre las localidades de la provincia.' },
+    { t: 1, ti: 'Sede universitaria en {loc}', cu: 'Los jóvenes de {loc} tienen que mudarse para estudiar. Proponemos una sede con dos carreras vinculadas a la producción local.' },
+  ],
+  ambiente: [
+    { t: 0, ti: 'Puntos verdes de reciclaje en cada barrio de {loc}', cu: 'Contenedores diferenciados y un día fijo de recolección de reciclables por barrio.' },
+    { t: 1, ti: 'Monitoreo público de la calidad del agua del río', cu: 'Que los análisis del agua de {loc} se publiquen cada mes en Ágora, con los valores y lo que significan.' },
+    { t: 4, ti: 'Paneles solares en edificios públicos de {prov}', cu: 'Instalar paneles en escuelas y hospitales para bajar el gasto en energía y reinvertir el ahorro.' },
+    { t: 2, ti: 'Ampliar la reserva natural cercana a {loc}', cu: 'El humedal cercano a {loc} pierde superficie cada año. Proponemos sumarlo al área protegida.' },
+  ],
+  seguridad: [
+    { t: 1, ti: 'Iluminación LED en plazas y paradas de {loc}', cu: 'Hay plazas y paradas de colectivo totalmente oscuras. Pedimos un relevamiento y luminarias LED.' },
+    { t: 3, ti: 'Semáforo y senda peatonal frente a la escuela', cu: 'En la avenida principal de {loc}, frente a la escuela, los autos pasan rápido. Pedimos semáforo y reductores.' },
+    { t: 2, ti: 'Mesas de seguridad barriales mensuales', cu: 'Reuniones abiertas cada mes entre vecinos y la policía comunitaria de {loc}.' },
+  ],
+  defensa: [
+    { t: 1, ti: 'Sistema de alerta temprana de incendios forestales', cu: 'Torres de vigilancia y alertas por mensaje para las zonas rurales de {prov}.' },
+    { t: 0, ti: 'Simulacros de evacuación anuales en {loc}', cu: 'Un simulacro por año en escuelas y edificios públicos, coordinado con protección civil.' },
+    { t: 3, ti: 'Capacitación en ciberseguridad para municipios', cu: 'Los municipios de {prov} sufrieron ataques informáticos. Proponemos capacitación y un equipo de respuesta.' },
+  ],
+  justicia: [
+    { t: 0, ti: 'Juzgado de paz itinerante para las zonas rurales', cu: 'Un juzgado de paz que recorra las localidades más alejadas de {prov} una vez por mes.' },
+    { t: 3, ti: 'Aviso claro cuando un trámite usa a Elysia', cu: 'Que cada resolución diga si se apoyó en Elysia y cómo pedir revisión humana, en lenguaje simple.' },
+    { t: 2, ti: 'Talleres de oficios en la unidad penitenciaria', cu: 'Para favorecer la reinserción, proponemos talleres de oficios con certificación oficial.' },
+  ],
+  economia: [
+    { t: 2, ti: 'Feria permanente de emprendedores en {loc}', cu: 'Un espacio fijo los fines de semana para que emprendedores locales vendan sin pagar alquiler.' },
+    { t: 0, ti: 'Programa de primer empleo para jóvenes de {prov}', cu: 'Incentivos a pymes que contraten jóvenes de 18 a 24 años en su primer trabajo formal.' },
+    { t: 3, ti: 'Simplificar la tasa municipal para pequeños comercios', cu: 'Una sola tasa fija mensual para comercios de menos de tres empleados.' },
+  ],
+  agro: [
+    { t: 3, ti: 'Mercado de productores familiares en {loc}', cu: 'Venta directa del productor al vecino, sin intermediarios, una vez por semana.' },
+    { t: 2, ti: 'Reparación de los canales de riego', cu: 'Los canales que abastecen a {loc} pierden casi la mitad del agua. Pedimos su revestimiento.' },
+    { t: 1, ti: 'Plan de reforestación con especies nativas', cu: 'Plantar especies nativas en las zonas taladas de {prov}, con participación de las escuelas.' },
+  ],
+  transporte: [
+    { t: 0, ti: 'Más frecuencias del tren en hora pico', cu: 'El tren que pasa por {loc} va lleno y llega tarde. Proponemos sumar frecuencias de 6 a 9 y de 17 a 20.' },
+    { t: 1, ti: 'Colectivo nocturno los fines de semana', cu: 'Después de medianoche no hay colectivos en {loc}. Proponemos una línea nocturna viernes y sábados.' },
+    { t: 2, ti: 'Bacheo de la ruta de acceso a {loc}', cu: 'La ruta que conecta {loc} con la capital provincial tiene baches peligrosos. Pedimos repavimentación.' },
+    { t: 3, ti: 'Wifi gratuito en plazas y estaciones', cu: 'Conectividad gratuita en espacios públicos de {loc} para reducir la brecha digital.' },
+  ],
+  exteriores: [
+    { t: 1, ti: 'Turnos consulares en línea y por teléfono', cu: 'Los nikienses en el exterior esperan meses un turno. Proponemos un sistema único con atención telefónica.' },
+    { t: 0, ti: 'Oficina de apoyo a exportadores de {prov}', cu: 'Asesoramiento gratuito a pymes de {prov} que quieran exportar por primera vez.' },
+    { t: 3, ti: 'Ventanilla única para personas migrantes', cu: 'Un lugar en {loc} donde hacer todos los trámites de residencia, con información en varios idiomas.' },
+  ],
+  social: [
+    { t: 0, ti: 'Plan de viviendas cooperativas en {loc}', cu: 'Terrenos fiscales para cooperativas de vivienda, con créditos a tasa baja.' },
+    { t: 3, ti: 'Rampas y veredas accesibles en el centro de {loc}', cu: 'Relevar y adaptar las esquinas del centro para personas en silla de ruedas y con cochecitos.' },
+    { t: 2, ti: 'Centro de día para personas mayores', cu: 'Un espacio con actividades, comida y acompañamiento para personas mayores que viven solas.' },
+    { t: 4, ti: 'Refuerzo alimentario en comedores comunitarios', cu: 'Aumentar las raciones y sumar frutas y verduras de productores locales.' },
+  ],
+};
+
+/* Debates modelo por nodo */
+const DEBATES_MODELO = {
+  salud: [['Crítica', 0, 'La guardia del hospital tarda más de 4 horas'], ['Idea', 4, '¿Y si los turnos se confirman por mensaje?'], ['Mejora', 1, 'Que el centro de salud abra los sábados']],
+  educacion: [['Crítica', 0, 'Las aulas no tienen ventilación en verano'], ['Idea', 4, 'Muestras de arte de estudiantes en la plaza'], ['Mejora', 2, 'Más capacitación docente en tecnología']],
+  ambiente: [['Crítica', 0, 'Basural a cielo abierto cerca del arroyo'], ['Idea', 4, 'Huertas solares comunitarias'], ['Mejora', 1, 'Publicar los análisis del agua']],
+  seguridad: [['Crítica', 1, 'Calles sin luz desde hace semanas'], ['Idea', 2, 'Grupos de vecinos con la policía comunitaria'], ['Mejora', 3, 'Controles de velocidad en la avenida']],
+  defensa: [['Pregunta', 1, '¿Qué hacemos si hay alerta por tormenta?'], ['Idea', 0, 'Kits de emergencia en escuelas'], ['Mejora', 3, 'Más protección para los datos municipales']],
+  justicia: [['Crítica', 0, 'Las causas tardan años en resolverse'], ['Idea', 3, 'Un botón de "pedir revisión humana" en cada trámite'], ['Mejora', 1, 'Más defensores públicos']],
+  economia: [['Crítica', 1, 'Los precios en el pueblo son más altos que en la capital'], ['Idea', 2, 'Sello "Hecho en la provincia"'], ['Mejora', 0, 'Bolsa de empleo local en Ágora']],
+  agro: [['Crítica', 2, 'El agua de riego no alcanza'], ['Idea', 3, 'Compras públicas a productores familiares'], ['Mejora', 1, 'Control de la tala ilegal']],
+  transporte: [['Crítica', 0, 'El tren de las 7:10 llegó tarde toda la semana'], ['Idea', 1, 'Pantallas con el horario real del colectivo'], ['Mejora', 3, 'Mejor señal de celular en la ruta']],
+  exteriores: [['Pregunta', 1, '¿Cómo renuevo el pasaporte desde el exterior?'], ['Idea', 2, 'Intercambios estudiantiles con países vecinos'], ['Mejora', 0, 'Menos demoras en la aduana']],
+  social: [['Crítica', 0, 'Los alquileres son imposibles'], ['Idea', 1, 'Más espacios recreativos para adolescentes'], ['Mejora', 3, 'Transporte adaptado para personas con discapacidad']],
+};
+
+const COMENTARIOS = {
+  'Crítica': ['Me pasa lo mismo, ya hice el reclamo dos veces.', 'Coincido, y en mi barrio es peor.', 'Habría que pedir que el nodo informe cuándo se soluciona.', 'Gracias por subirlo, no sabía que era tan común.', 'Propongo convertirlo en iniciativa popular para que el nodo lo trate.'],
+  'Idea': ['Muy buena idea, la apoyo.', '¿Cuánto costaría? Estaría bueno que Elysia haga el informe de impacto.', 'En otra provincia se hizo algo parecido y funcionó.', 'Sumaría que se pueda participar también de forma presencial.', 'Me gusta, pero habría que empezar con una prueba piloto.'],
+  'Mejora': ['Totalmente, es un cambio chico con mucho impacto.', 'Se podría aplicar primero en la capital provincial y después extender.', 'Apoyo. Que el nodo publique un cronograma.', 'Buena propuesta, aunque hay que ver el presupuesto.'],
+  'Pregunta': ['Hasta donde sé, hay información en la sección del nodo.', 'Yo también quisiera saberlo.', 'Lo pueden consultar en el punto de atención presencial del municipio.'],
+};
+
+const LEYES_MODELO = {
+  salud: ['Ley de Guardias Mínimas Garantizadas', 'Ley de Salud Mental Comunitaria'],
+  educacion: ['Ley de Bibliotecas Abiertas', 'Ley de Conectividad Escolar'],
+  ambiente: ['Ley de Gestión Integral de Residuos', 'Ley de Protección de Humedales'],
+  seguridad: ['Ley de Policía Comunitaria', 'Ley de Seguridad Vial Escolar'],
+  defensa: ['Ley de Protección Civil', 'Ley de Ciberdefensa Municipal'],
+  justicia: ['Ley de Revisión Humana de Decisiones Automatizadas', 'Ley de Juzgados de Paz Itinerantes'],
+  economia: ['Ley de Primer Empleo', 'Ley de Ferias Emprendedoras'],
+  agro: ['Ley de Agricultura Familiar', 'Ley de Bosques Nativos'],
+  transporte: ['Ley de Transporte Nocturno', 'Ley de Conectividad Rural'],
+  exteriores: ['Ley de Atención Consular Digital', 'Ley de Ventanilla Migrante'],
+  social: ['Ley de Vivienda Cooperativa', 'Ley de Accesibilidad Urbana'],
+};
+
+/* Boletín Oficial: d = días antes de hoy */
+const BOLETIN = [
+  { d: 0, cat: 'Plenario de Nodos', ti: 'El Plenario aprobó el Presupuesto Nacional 2027', cu: 'Con 41 votos a favor y 12 en contra, el Plenario de Nodos aprobó el presupuesto. El Consejo Federal tiene 30 días para revisarlo. El texto completo ya está en la carpeta Económica de Evanescence.', destacado: true },
+  { d: 0, cat: 'Consultas', ti: 'Comienza la deliberación sobre la reforma del Módulo Ambiental', cu: 'Durante 20 días habrá foros abiertos y fuentes plurales sobre la propuesta de incorporar el acceso al agua potable como derecho fundamental. Después se vota en referendo.' },
+  { d: 1, cat: 'Prisma', ti: 'Prisma publicó su informe trimestral sobre Elysia', cu: 'El informe revisó 1.204 detecciones de problemas hechas por Elysia. Encontró un sesgo en la clasificación de reclamos rurales, que ya fue corregido con la firma de tres custodios.' },
+  { d: 2, cat: 'Nodo de Transportes', ti: 'Nuevo horario de trenes interprovinciales desde el lunes', cu: 'Se suman seis frecuencias diarias entre la capital, Lumina, y Senna. La medida responde a una iniciativa popular que superó el umbral de apoyos.' },
+  { d: 4, cat: 'Consejo Federal', ti: 'El Consejo Federal aprobó el reparto de recursos entre regiones', cu: 'Las provincias con menor conectividad recibirán un 12 % adicional para infraestructura digital y puntos de atención presencial.' },
+  { d: 6, cat: 'Poder Jurisdiccional', ti: 'El Tribunal Superior declaró inconstitucional una ordenanza municipal', cu: 'La norma usaba datos de Ágora para enviar mensajes políticos personalizados, algo que prohíbe el Módulo de Derechos.' },
+  { d: 9, cat: 'Elysia', ti: 'Elysia detectó un vacío normativo sobre drones de reparto', cu: 'El Nodo de Transportes y Comunicaciones tiene 90 días para tratarlo. Cualquier ciudadano puede comentar en el foro del nodo.' },
+  { d: 12, cat: 'Nodo de Salud', ti: 'Campaña nacional de vacunación antigripal', cu: 'Las vacunas están disponibles en todos los centros de salud. El turno se pide en Ágora, por teléfono o en ventanilla.' },
+];
+
+/* Calendario: día del mes relativo (se ajusta al mes actual) */
+const EVENTOS_MES = [
+  { dia: 3, tipo: 'sesion', ti: 'Sesión abierta del Plenario de Nodos', lugar: 'Lumen, Lumina · transmisión en Ágora' },
+  { dia: 7, tipo: 'consulta', ti: 'Abre la votación de la consulta sobre transporte nocturno', lugar: 'Nacional' },
+  { dia: 10, tipo: 'prisma', ti: 'Audiencia pública de Prisma', lugar: 'Lumen, Lumina · presencial y en vivo' },
+  { dia: 14, tipo: 'federal', ti: 'Reunión del Consejo Federal', lugar: 'Spiro, Russell' },
+  { dia: 18, tipo: 'nodo', ti: 'Audiencia del Nodo de Salud sobre guardias', lugar: 'Todas las provincias' },
+  { dia: 21, tipo: 'consulta', ti: 'Cierra la deliberación sobre el Módulo Ambiental', lugar: 'Nacional' },
+  { dia: 24, tipo: 'feriado', ti: 'Día de la Lumencracia (feriado nacional)', lugar: 'Todo el país' },
+  { dia: 28, tipo: 'elysia', ti: 'Elysia publica el balance mensual de detecciones', lugar: 'Bitácora pública' },
+];
+
+const PROGRAMAS = [
+  { id: 'horizonte', nombre: 'Horizonte Verde', agrupacion: 'Alianza Ecológica Federal', color: '#3dbb5c',
+    lema: 'Un país que cuida su agua, sus bosques y su gente.',
+    prioridades: { salud: 70, educacion: 65, ambiente: 95, seguridad: 45, defensa: 30, justicia: 60, economia: 50, agro: 85, transporte: 70, exteriores: 40, social: 65 } },
+  { id: 'productiva', nombre: 'Niki Productiva', agrupacion: 'Frente del Trabajo', color: '#f39a1e',
+    lema: 'Empleo, rutas y trenes para producir en todo el país.',
+    prioridades: { salud: 60, educacion: 70, ambiente: 45, seguridad: 60, defensa: 45, justicia: 50, economia: 95, agro: 75, transporte: 90, exteriores: 70, social: 50 } },
+  { id: 'comunidad', nombre: 'Comunidad Primero', agrupacion: 'Movimiento Solidario Nikiense', color: '#ef5a6f',
+    lema: 'Nadie se queda afuera: salud, vivienda y educación.',
+    prioridades: { salud: 90, educacion: 85, ambiente: 60, seguridad: 50, defensa: 30, justicia: 70, economia: 55, agro: 45, transporte: 55, exteriores: 35, social: 95 } },
+  { id: 'red', nombre: 'Red Segura', agrupacion: 'Unión Cívica Nikiense', color: '#3b7fd9',
+    lema: 'Orden, justicia rápida y fronteras protegidas.',
+    prioridades: { salud: 55, educacion: 55, ambiente: 40, seguridad: 95, defensa: 80, justicia: 85, economia: 65, agro: 50, transporte: 50, exteriores: 60, social: 45 } },
+];
+
+/* Consultas: alcance 'nacional' o 'provincial' ({prov} se reemplaza) */
+const CONSULTAS_MODELO = [
+  { id: 'c-agua', alcance: 'nacional', vinculante: true, estado: 'deliberacion', convoca: 'Plenario de Nodos', nodo: 'ambiente',
+    pregunta: '¿Aprobás la reforma del Módulo Ambiental de Evanescence para incorporar el acceso al agua potable como derecho fundamental?',
+    opciones: ['Sí', 'No'], base: [61, 39], diasCierre: 12,
+    fuentes: ['Informe de impacto de Elysia (no vinculante)', 'Dictamen de la Comisión de Codificación', 'Informe alternativo de la minoría', 'Opinión de universidades públicas'] },
+  { id: 'c-nocturno', alcance: 'nacional', vinculante: false, estado: 'votacion', convoca: 'Nodo de Transportes y Comunicaciones', nodo: 'transporte',
+    pregunta: '¿Qué debería priorizar el Nodo de Transportes en 2027?',
+    opciones: ['Más frecuencias de trenes', 'Colectivos nocturnos', 'Arreglo de rutas', 'Internet en zonas rurales'], base: [34, 22, 27, 17], diasCierre: 5,
+    fuentes: ['Datos de uso del transporte público', 'Informe de impacto de Elysia', 'Propuestas de las provincias'] },
+  { id: 'c-hospital', alcance: 'provincial', vinculante: true, estado: 'votacion', convoca: 'Nodo de Salud de {prov}', nodo: 'salud',
+    pregunta: '¿Dónde debería construirse el nuevo hospital regional de {prov}?',
+    opciones: '{localidades}', base: null, diasCierre: 9,
+    fuentes: ['Mapa de distancias a centros de salud', 'Informe técnico del Nodo de Salud', 'Informe de impacto de Elysia'] },
+  { id: 'c-biblio', alcance: 'provincial', vinculante: false, estado: 'cerrada', convoca: 'Nodo de Educación y Cultura de {prov}', nodo: 'educacion',
+    pregunta: '¿Estás de acuerdo con extender el horario de las bibliotecas públicas de {prov} hasta las 22 h?',
+    opciones: ['Sí', 'No', 'Solo en época de exámenes'], base: [58, 14, 28], diasCierre: -6,
+    fuentes: ['Encuesta de uso de bibliotecas', 'Costos estimados del Nodo'] },
+];
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ágora · Niki</title>
+  <meta name="description" content="Ágora: demo educativa de participación ciudadana de la República de Niki, en la Lumencracia.">
+  <meta name="theme-color" content="#14b8c4">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ágora">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bubbles" aria-hidden="true"></div>
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer" id="drawer" aria-label="Menú"></aside>
+  <div id="app">
+    <header class="topbar">
+      <button class="icon-btn" id="menuBtn" aria-label="Abrir menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="#/"><img src="logo.webp" width="34" height="34" alt=""><b>Ágora</b></a>
+      <button class="user-chip" id="userChip"></button>
+    </header>
+    <main id="view"></main>
+  </div>
+  <div class="modal-wrap" id="modal"><div class="modal" id="modalBody"></div></div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
+{
+  "name": "Ágora · Participación ciudadana de Niki",
+  "short_name": "Ágora",
+  "description": "Demo educativa de participación ciudadana en la Lumencracia de la República de Niki.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#bfeeff",
+  "theme_color": "#14b8c4",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
+
+/* Ágora — estética Frutiger Aero */
+:root {
+  /* Paleta Frutiger Aero / Eco de Ágora */
+  --turq: #79DCE8;
+  --turq-d: #2BA9B8;
+  --green: #8BD66A;
+  --green-d: #4FA83A;
+  --sky: #A8E7F7;
+  --orange: #FF922E;
+  --orange-d: #E8730C;
+  --yellow: #FFE15A;
+  --white: #FFFFFF;
+  --ink: #086B71;
+  --ink-soft: #3E7F86;
+  --glass: rgba(255, 255, 255, 0.62);
+  --glass-strong: rgba(255, 255, 255, 0.82);
+  --line: rgba(255, 255, 255, 0.95);
+  --shadow: 0 10px 28px rgba(0, 92, 122, 0.18);
+  --r: 20px;
+  --font: "Segoe UI", "Frutiger", "Myriad Pro", "Helvetica Neue", Roboto, Arial, sans-serif;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.45;
+  min-height: 100vh;
+  background: #A8E7F7;
+  overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.10) 0%, rgba(240,252,255,.30) 35%, rgba(240,252,255,.50) 70%, rgba(240,253,245,.62) 100%),
+    url(fondo.webp) center top / cover no-repeat,
+    linear-gradient(180deg, #3fb8ec 0%, #A8E7F7 60%, #8BD66A 100%);
+}
+
+/* Burbujas decorativas */
+.bubbles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bubbles span {
+  position: absolute; bottom: -80px; border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0 9%, rgba(255,255,255,.25) 22%, rgba(180,240,255,.18) 60%, rgba(255,255,255,.55) 100%);
+  border: 1px solid rgba(255,255,255,.7);
+  animation: rise linear infinite;
+}
+@keyframes rise { to { transform: translateY(-120vh) translateX(30px); } }
+@media (prefers-reduced-motion: reduce) { .bubbles span { animation: none; display: none; } }
+
+#app { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; padding: 0 16px calc(32px + var(--safe-b)); }
+
+/* Barra superior */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; margin: 0 -16px; padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.55));
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,.9);
+  box-shadow: 0 4px 18px rgba(0, 90, 120, .12);
+}
+.topbar .brand { flex: 1; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+.topbar .brand b { font-size: 21px; letter-spacing: .5px; background: linear-gradient(180deg, #2BA9B8, #086B71); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.icon-btn {
+  width: 42px; height: 42px; border-radius: 14px; border: 1px solid rgba(255,255,255,.95);
+  background: linear-gradient(180deg, #ffffff 0%, #e3f7fb 50%, #c9eef5 51%, #e9fbff 100%);
+  box-shadow: 0 3px 10px rgba(0,100,130,.18), inset 0 1px 0 #fff;
+  display: grid; place-items: center; cursor: pointer; color: var(--turq-d);
+}
+.icon-btn svg { width: 22px; height: 22px; }
+.user-chip {
+  font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.95); color: var(--ink);
+  background: linear-gradient(180deg, #fff, #dff5fa); box-shadow: 0 2px 8px rgba(0,100,130,.15);
+  max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Vidrio */
+.glass {
+  background: linear-gradient(180deg, var(--glass-strong), var(--glass));
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: var(--shadow), inset 0 1px 0 #fff;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  padding: 16px;
+  margin: 14px 0;
+  position: relative;
+}
+.glass.tight { padding: 12px; }
+.section-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 22px 2px 8px; }
+.section-title h2 { margin: 0; font-size: 19px; color: var(--ink); text-shadow: 0 1px 0 rgba(255,255,255,.9); }
+.section-title a, .link { color: var(--turq-d); font-weight: 600; font-size: 14px; text-decoration: none; cursor: pointer; background: none; border: 0; font-family: inherit; padding: 0; }
+h1, h2, h3 { line-height: 1.2; }
+h3 { margin: 0 0 6px; font-size: 16px; }
+p { margin: 6px 0; }
+.muted { color: var(--ink-soft); font-size: 13px; }
+.small { font-size: 12.5px; }
+
+/* Botones brillantes */
+.btn {
+  position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: 700 15px var(--font); color: #05565b; text-decoration: none; cursor: pointer;
+  padding: 11px 20px; border-radius: 999px; border: 1px solid var(--turq-d);
+  background: linear-gradient(180deg, #e4fbfd 0%, #a9ebf2 46%, #79DCE8 50%, #5fd1df 80%, #9ae6ef 100%);
+  box-shadow: 0 4px 14px rgba(43, 169, 184, .45), inset 0 1px 0 #fff, inset 0 -3px 8px rgba(8,107,113,.18);
+  text-shadow: 0 1px 0 rgba(255,255,255,.7);
+  transition: transform .12s ease, filter .12s ease;
+}
+.btn::before {
+  content: ""; position: absolute; left: 6%; right: 6%; top: 2px; height: 46%; border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.1)); pointer-events: none;
+}
+.btn:active { transform: scale(.97); filter: brightness(.96); }
+.btn.green { color: #24520f; border-color: var(--green-d); background: linear-gradient(180deg, #ecfbe2 0%, #b9eb9f 46%, #8BD66A 50%, #74c955 80%, #a9e38d 100%); box-shadow: 0 4px 14px rgba(79,168,58,.4), inset 0 1px 0 #fff, inset 0 -3px 8px rgba(40,100,20,.18); }
+.btn.orange { color: #fff; text-shadow: 0 1px 2px rgba(150,60,0,.5); border-color: var(--orange-d); background: linear-gradient(180deg, #FFE15A 0%, #ffbf4a 40%, #FF922E 52%, #f5801c 80%, #ffa64d 100%); box-shadow: 0 4px 14px rgba(255,146,46,.45), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -3px 8px rgba(150,60,0,.2); }
+.btn.yellow { color: #6a4a00; border-color: #e6bf1f; background: linear-gradient(180deg, #fffbe0 0%, #fff09a 46%, #FFE15A 50%, #ffd636 80%, #ffec8a 100%); box-shadow: 0 4px 14px rgba(230,190,30,.4), inset 0 1px 0 #fff; }
+.btn.ghost { color: var(--turq-d); text-shadow: none; border-color: rgba(10,143,156,.35); background: linear-gradient(180deg, #ffffff 0%, #ecfbfd 50%, #d9f4f8 51%, #f1fdff 100%); }
+.btn.small { padding: 7px 14px; font-size: 13.5px; }
+.btn.block { display: flex; width: 100%; }
+.btn[disabled] { opacity: .55; cursor: not-allowed; filter: grayscale(.4); }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+/* Orbes (iconos brillantes) */
+.orb {
+  --c: var(--turq);
+  width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 28px; position: relative;
+  background: radial-gradient(circle at 50% 120%, color-mix(in srgb, var(--c) 55%, #fff) 0%, var(--c) 45%, color-mix(in srgb, var(--c) 70%, #003040) 100%);
+  border: 2px solid rgba(255,255,255,.9);
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--c) 45%, transparent), inset 0 -4px 10px rgba(0,0,0,.15);
+}
+.orb::after {
+  content: ""; position: absolute; left: 14%; right: 14%; top: 5%; height: 45%; border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.05));
+}
+.orb.sm { width: 44px; height: 44px; font-size: 20px; }
+.orb.lg { width: 84px; height: 84px; font-size: 38px; }
+
+/* Hero */
+.hero { text-align: center; padding: 26px 18px 20px; overflow: hidden; }
+.hero .logo { width: 108px; height: 108px; margin: 0 auto 6px; filter: drop-shadow(0 8px 16px rgba(0,110,140,.35)); }
+.hero h1 { margin: 6px 0 4px; font-size: 30px; color: var(--ink); text-shadow: 0 2px 0 #fff; }
+.hero .sub { color: var(--ink-soft); margin: 0 auto 12px; max-width: 360px; }
+.hero::before {
+  content: ""; position: absolute; inset: -40% -20% auto; height: 70%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255,255,255,.75), rgba(255,255,255,0) 70%); pointer-events: none;
+}
+
+.demo-ribbon {
+  display: flex; gap: 10px; align-items: flex-start; font-size: 12.5px; color: #6b3d00;
+  background: linear-gradient(180deg, rgba(255,240,210,.92), rgba(255,226,170,.8));
+  border: 1px solid rgba(255,255,255,.95); border-radius: 14px; padding: 9px 12px; margin: 12px 0;
+  box-shadow: 0 4px 12px rgba(200,120,0,.15);
+}
+
+/* Chips y badges */
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; font: 600 13px var(--font); padding: 7px 13px; border-radius: 999px; cursor: pointer; color: var(--ink);
+  border: 1px solid rgba(255,255,255,.95); background: linear-gradient(180deg, #ffffff, #e2f6fa);
+  box-shadow: 0 2px 6px rgba(0,100,130,.12);
+}
+.chip.on { color: #05565b; border-color: var(--turq-d); background: linear-gradient(180deg, #e4fbfd, #79DCE8 55%, #5fd1df); box-shadow: 0 2px 8px rgba(43,169,184,.35), inset 0 1px 0 #fff; }
+.badge { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; color: #fff; background: var(--turq); vertical-align: middle; letter-spacing: .2px; }
+.badge.orange { background: var(--orange); }
+.badge.green { background: var(--green-d); }
+.badge.gray { background: #7e98a2; }
+.badge.purple { background: #8a5cd6; }
+.badge.red { background: #e2475d; }
+.badge.outline { background: rgba(255,255,255,.7); color: var(--ink); border: 1px solid rgba(10,143,156,.35); }
+
+/* Listas de tarjetas */
+.card-list { display: grid; gap: 10px; }
+.item {
+  display: block; text-decoration: none; color: inherit; cursor: pointer; text-align: left; width: 100%; font: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.66));
+  border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px;
+  box-shadow: 0 4px 14px rgba(0,92,122,.12), inset 0 1px 0 #fff;
+}
+.item:active { transform: scale(.99); }
+.item .meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; }
+.item h3 { margin: 2px 0 4px; }
+.row { display: flex; align-items: center; gap: 12px; }
+.row .grow { flex: 1; min-width: 0; }
+
+/* Noticias */
+.news-feature { border-left: 5px solid var(--orange); }
+.news-cat { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--turq-d); }
+.news-date { font-size: 12px; color: var(--ink-soft); }
+.news-body { display: none; margin-top: 6px; }
+.item.open .news-body { display: block; }
+
+/* Calendario */
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.cal-head h3 { margin: 0; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cal-grid .dow { font-size: 11px; font-weight: 700; color: var(--ink-soft); padding: 2px 0; }
+.cal-day {
+  position: relative; aspect-ratio: 1; border-radius: 12px; display: grid; place-items: center; font-weight: 600; font-size: 14px;
+  background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.9); cursor: pointer; color: var(--ink); font-family: inherit; padding: 0;
+}
+.cal-day.empty { background: none; border: 0; cursor: default; }
+.cal-day.today { background: linear-gradient(180deg, #FFE15A, #FF922E); color: #fff; border-color: var(--orange-d); text-shadow: 0 1px 2px rgba(150,60,0,.45); }
+.cal-day.sel { outline: 3px solid var(--turq-d); outline-offset: -1px; }
+.cal-day .dots { position: absolute; bottom: 4px; left: 0; right: 0; display: flex; justify-content: center; gap: 2px; }
+.cal-day .dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); }
+.cal-day.today .dots i { background: #fff; }
+.ev { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px solid rgba(10,143,156,.12); }
+.ev:first-child { border-top: 0; }
+.ev .d { flex: none; width: 44px; text-align: center; border-radius: 12px; padding: 4px 0; background: linear-gradient(180deg, #fff, #dff5fa); border: 1px solid #fff; font-weight: 700; color: var(--turq-d); }
+.ev .d small { display: block; font-size: 10px; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+
+/* Provincias */
+.prov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.prov-card {
+  --c: var(--turq); position: relative; overflow: hidden; text-decoration: none; color: #fff; border-radius: 18px; padding: 14px 12px 12px; min-height: 96px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--c) 55%, #fff) 0%, var(--c) 55%, color-mix(in srgb, var(--c) 75%, #00303c) 100%);
+  border: 1px solid rgba(255,255,255,.9); box-shadow: 0 6px 16px color-mix(in srgb, var(--c) 35%, transparent), inset 0 1px 0 rgba(255,255,255,.8);
+  text-shadow: 0 1px 2px rgba(0,40,50,.45); display: flex; flex-direction: column; justify-content: flex-end;
+}
+.prov-card::before { content: ""; position: absolute; left: -10%; right: -10%; top: -30%; height: 75%; border-radius: 50%; background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0)); }
+.prov-card b { position: relative; font-size: 15.5px; line-height: 1.15; }
+.prov-card span { position: relative; font-size: 12px; opacity: .95; }
+.prov-card .num { position: absolute; top: 8px; right: 10px; font-size: 12px; font-weight: 700; opacity: .85; }
+
+.banner {
+  --c: var(--turq); color: #fff; border-radius: 22px; padding: 18px; margin: 14px 0; position: relative; overflow: hidden;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--c) 50%, #fff) 0%, var(--c) 50%, color-mix(in srgb, var(--c) 70%, #00303c) 100%);
+  border: 1px solid rgba(255,255,255,.9); box-shadow: 0 10px 24px color-mix(in srgb, var(--c) 40%, transparent);
+  text-shadow: 0 1px 2px rgba(0,40,50,.4);
+}
+.banner::before { content: ""; position: absolute; left: -10%; right: -10%; top: -45%; height: 80%; border-radius: 50%; background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,0)); }
+.banner > * { position: relative; }
+.banner h1 { margin: 2px 0; font-size: 26px; }
+.banner .kv { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; margin-top: 8px; }
+
+.nodo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 6px; }
+.nodo-tile { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--ink); text-align: center; font-size: 12px; font-weight: 600; line-height: 1.15; }
+
+/* Tabs internas */
+.tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.5); border: 1px solid #fff; margin: 12px 0; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { flex: 1 0 auto; text-align: center; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 13.5px; padding: 8px 12px; border-radius: 999px; }
+.tabs a.on { color: #05565b; background: linear-gradient(180deg, #e4fbfd 0%, #a9ebf2 46%, #79DCE8 50%, #9ae6ef 100%); box-shadow: 0 2px 8px rgba(43,169,184,.35), inset 0 1px 0 #fff; }
+
+/* Progreso */
+.progress { height: 14px; border-radius: 999px; background: rgba(255,255,255,.7); border: 1px solid rgba(10,143,156,.25); overflow: hidden; position: relative; }
+.progress > i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(180deg, #d9f5c8 0%, #8BD66A 50%, #6cc24b 51%, #a2e083 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.7); }
+.progress.turq > i { background: linear-gradient(180deg, #d6f8fb 0%, #79DCE8 50%, #4ccbd9 51%, #8fe3ec 100%); }
+.progress.orange > i { background: linear-gradient(90deg, #FFE15A, #FF922E); box-shadow: inset 0 1px 0 rgba(255,255,255,.8); }
+
+/* Contador */
+.counter { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+.counter.six { grid-template-columns: repeat(6, 1fr); gap: 5px; }
+.counter div { text-align: center; border-radius: 14px; padding: 8px 2px; background: linear-gradient(180deg, #ffffff 0%, #e7f9fc 50%, #d2f1f7 51%, #f2fdff 100%); border: 1px solid #fff; box-shadow: 0 3px 10px rgba(0,100,130,.15); }
+.counter b { display: block; font-size: 22px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.counter.six b { font-size: 18px; }
+.counter span { font-size: 10.5px; color: var(--ink-soft); text-transform: uppercase; font-weight: 700; letter-spacing: .3px; }
+.counter.down b { color: var(--orange-d); }
+
+/* Pasos */
+.steps { list-style: none; padding: 0; margin: 8px 0 0; counter-reset: s; }
+.steps li { position: relative; padding: 4px 0 12px 42px; counter-increment: s; }
+.steps li::before {
+  content: counter(s); position: absolute; left: 0; top: 2px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; text-shadow: 0 1px 2px rgba(8,107,113,.6);
+  background: radial-gradient(circle at 50% 120%, #e6fbe0, #8BD66A 40%, #2BA9B8 85%); border: 2px solid #fff; box-shadow: 0 3px 8px rgba(0,110,130,.3);
+}
+.steps li:not(:last-child)::after { content: ""; position: absolute; left: 15px; top: 34px; bottom: 0; width: 2px; background: rgba(20,184,196,.35); }
+
+.list-check { list-style: none; padding: 0; margin: 6px 0; }
+.list-check li { padding: 4px 0 4px 26px; position: relative; }
+.list-check li::before { content: "✔"; position: absolute; left: 2px; color: var(--green-d); font-weight: 700; }
+.list-check.no li::before { content: "✖"; color: #e2475d; }
+
+/* Formularios */
+label.f { display: block; font-weight: 600; font-size: 13.5px; margin: 12px 0 5px; }
+input.in, select.in, textarea.in {
+  width: 100%; font: 15px var(--font); color: var(--ink); padding: 11px 13px; border-radius: 14px;
+  border: 1px solid rgba(10,143,156,.3); background: rgba(255,255,255,.9); box-shadow: inset 0 2px 4px rgba(0,80,100,.08);
+}
+textarea.in { min-height: 110px; resize: vertical; }
+input.in:focus, select.in:focus, textarea.in:focus { outline: 3px solid rgba(20,184,196,.35); border-color: var(--turq); }
+.elysia-hint {
+  display: none; margin-top: 10px; padding: 10px 12px; border-radius: 14px; font-size: 13.5px;
+  background: linear-gradient(180deg, rgba(225,250,255,.95), rgba(200,240,250,.85)); border: 1px solid #fff; box-shadow: 0 3px 10px rgba(0,100,130,.12);
+}
+.elysia-hint.show { display: block; }
+
+/* Opciones de voto */
+.opt {
+  display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 14px; margin: 8px 0; cursor: pointer;
+  background: rgba(255,255,255,.8); border: 2px solid rgba(255,255,255,.95); box-shadow: 0 2px 8px rgba(0,100,130,.1); font-weight: 600;
+}
+.opt.on { border-color: var(--turq); background: linear-gradient(180deg, #f0feff, #d5f5f9); }
+.opt input { accent-color: var(--turq-d); width: 18px; height: 18px; }
+.result { margin: 10px 0; }
+.result .lbl { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.result.mine .lbl::after { content: ""; }
+
+/* Comentarios y chat */
+.comment { padding: 10px 0; border-top: 1px solid rgba(10,143,156,.12); }
+.comment:first-child { border-top: 0; }
+.comment .who { font-weight: 700; font-size: 13.5px; }
+.comment .who small { font-weight: 500; color: var(--ink-soft); }
+.avatar { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 14px; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+
+.stream {
+  position: relative; aspect-ratio: 16/9; border-radius: 18px; overflow: hidden; color: #fff;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,0) 40%), linear-gradient(135deg, #0b6f86, #13b5c8 50%, #4cc35a);
+  border: 1px solid #fff; box-shadow: var(--shadow);
+}
+.stream .live { position: absolute; top: 10px; left: 10px; background: #e2475d; font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 6px; letter-spacing: .5px; }
+.stream .live::before { content: "● "; animation: blink 1.2s infinite; }
+@keyframes blink { 50% { opacity: .2; } }
+.stream .viewers { position: absolute; top: 10px; right: 10px; font-size: 12.5px; background: rgba(0,40,50,.4); padding: 3px 9px; border-radius: 6px; }
+.stream .caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 12px 10px; background: linear-gradient(180deg, rgba(0,40,50,0), rgba(0,40,50,.7)); font-size: 13.5px; }
+.stream .podium { position: absolute; left: 50%; top: 32%; transform: translate(-50%,-50%); display: flex; gap: 18px; }
+.stream .podium i { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.85); position: relative; box-shadow: 0 0 0 3px rgba(255,255,255,.25); }
+.stream .podium i::after { content: ""; position: absolute; left: -8px; right: -8px; top: 36px; height: 30px; border-radius: 22px 22px 6px 6px; background: rgba(255,255,255,.7); }
+.chat { height: 240px; overflow-y: auto; padding: 4px 2px; display: flex; flex-direction: column; gap: 6px; }
+.chat .msg { font-size: 13.5px; background: rgba(255,255,255,.75); padding: 7px 10px; border-radius: 12px; border: 1px solid #fff; animation: pop .25s ease; }
+.chat .msg b { color: var(--turq-d); }
+.chat .msg.mine { background: linear-gradient(180deg, #e9fff0, #d3f7dc); }
+@keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+.inline-form { display: flex; gap: 8px; margin-top: 8px; }
+.inline-form .in { flex: 1; }
+
+/* Gráficos */
+.chart { width: 100%; height: auto; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12.5px; margin-top: 6px; }
+.legend i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+
+/* Tabla comparativa */
+.cmp { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.cmp th { text-align: left; font-weight: 700; padding: 6px 4px; }
+.cmp td { padding: 5px 4px; border-top: 1px solid rgba(10,143,156,.12); vertical-align: middle; }
+.cmp .bars { display: grid; gap: 2px; }
+.cmp .bars i { display: block; height: 6px; border-radius: 4px; }
+
+/* Menú lateral */
+.scrim { position: fixed; inset: 0; background: rgba(0,50,70,.35); z-index: 40; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.scrim.open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; bottom: 0; left: 0; width: min(86vw, 340px); z-index: 50; transform: translateX(-105%); transition: transform .25s ease;
+  background: linear-gradient(180deg, rgba(235,251,255,.97), rgba(220,246,236,.97)); border-right: 1px solid #fff;
+  box-shadow: 8px 0 30px rgba(0,60,80,.25); overflow-y: auto; padding: 16px 14px calc(24px + var(--safe-b));
+}
+.drawer.open { transform: none; }
+.drawer .dhead { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.drawer .dhead b { font-size: 20px; color: var(--ink); flex: 1; }
+.drawer nav a, .drawer nav button.dl {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; text-decoration: none; color: var(--ink); font: 600 15px var(--font);
+  padding: 10px 10px; border-radius: 14px; border: 0; background: none; cursor: pointer;
+}
+.drawer nav a:hover, .drawer nav a.on, .drawer nav button.dl:hover { background: rgba(255,255,255,.75); }
+.drawer nav .ico { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; background: linear-gradient(180deg, #fff, #d8f3f8); border: 1px solid #fff; box-shadow: 0 2px 6px rgba(0,100,130,.15); flex: none; }
+.drawer .sub { padding-left: 46px; display: none; }
+.drawer .sub.open { display: block; }
+.drawer .sub a { padding: 7px 10px; font-weight: 500; font-size: 14px; }
+.drawer .mini-count { margin: 6px 0 14px; }
+
+/* Modal */
+.modal-wrap { position: fixed; inset: 0; z-index: 60; display: none; align-items: flex-end; justify-content: center; background: rgba(0,50,70,.35); padding: 0; }
+.modal-wrap.open { display: flex; }
+.modal { width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; border-radius: 24px 24px 0 0; padding: 18px 16px calc(22px + var(--safe-b));
+  background: linear-gradient(180deg, #f4feff, #e3f8ef); border: 1px solid #fff; box-shadow: 0 -10px 30px rgba(0,60,80,.25); animation: up .22s ease; }
+@keyframes up { from { transform: translateY(40px); opacity: 0; } }
+.modal h2 { margin: 0 0 4px; color: var(--ink); }
+
+.toast { color: #05565b !important; position: fixed; left: 50%; bottom: calc(24px + var(--safe-b)); transform: translateX(-50%) translateY(20px); opacity: 0; z-index: 70; transition: all .25s;
+  background: linear-gradient(180deg, #ffffff, #A8E7F7 60%, #79DCE8); font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 6px 18px rgba(0,100,120,.35); border: 1px solid #fff; max-width: 90vw; text-align: center; }
+.toast.show { opacity: 1; transform: translateX(-50%); }
+
+footer.foot { text-align: center; font-size: 12px; color: var(--ink-soft); margin: 26px 0 8px; }
+footer.foot .prisma { display: inline-flex; gap: 6px; align-items: center; font-weight: 700; color: #6a3fb8; }
+.empty-note { text-align: center; color: var(--ink-soft); padding: 18px 8px; }
+.back { display: inline-flex; align-items: center; gap: 4px; margin: 12px 0 0; }
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.kpis div { text-align: center; padding: 8px 4px; border-radius: 14px; background: rgba(255,255,255,.7); border: 1px solid #fff; }
+.kpis b { display: block; font-size: 19px; color: var(--ink); }
+.kpis span { font-size: 11px; color: var(--ink-soft); font-weight: 600; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Escena Frutiger Eco del inicio: sol, ciudad de cristal, pasto y esferas */
+/* escena dibujada (ya no se usa) */ .hero .scene { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 46%; pointer-events: none; opacity: .9; }
+.hero > *:not(.scene) { position: relative; z-index: 1; }
+.hero { background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.55) 55%, rgba(220,250,230,.6)); }
+.badge.yellow { background: var(--yellow); color: #6a4a00; }
+
+/* Fotos de Ágora (creadas por el equipo) */
+.hero.photo-bg {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.55) 38%, rgba(240,253,255,.86) 62%, rgba(240,253,255,.92) 100%),
+    var(--img) center top / cover no-repeat;
+}
+.hero.photo-bg .sub { color: #1f5f66; }
+.photo-strip {
+  position: relative; height: 150px; border-radius: 20px; margin: 10px 0 14px; overflow: hidden;
+  background: var(--img) center / cover no-repeat; border: 2px solid rgba(255,255,255,.95);
+  box-shadow: 0 10px 24px rgba(0, 92, 122, .22);
+}
+.photo-strip::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 45%; background: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,0)); }
+.photo-strip span {
+  position: absolute; left: 12px; bottom: 12px; right: 12px; font-weight: 800; font-size: 16px; color: #fff;
+  text-shadow: 0 2px 6px rgba(0,50,70,.65);
+}
+.deco-sphere { position: absolute; right: -18px; top: -26px; width: 110px; height: 110px; opacity: .55; pointer-events: none; mix-blend-mode: multiply; border-radius: 50%; }
+
+/* Mapa de Niki (casco de F1) */
+.mapa-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; color: var(--ink); letter-spacing: .3px; }
+.mapa-svg { width: 100%; height: auto; display: block; margin: 6px 0 4px; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+.mapa-svg .velocidad path { fill: none; stroke: #79DCE8; stroke-width: 2.5; stroke-linecap: round; opacity: .7; }
+.prov-shape { cursor: pointer; outline: none; }
+.prov-shape polygon { fill: color-mix(in srgb, var(--c) 48%, #fff); stroke: #fff; stroke-width: 3.5; stroke-linejoin: round; transition: fill .18s ease; }
+.prov-shape:hover polygon, .prov-shape:focus-visible polygon { fill: color-mix(in srgb, var(--c) 78%, #fff); }
+.prov-shape.on polygon { fill: var(--c); stroke-width: 4.5; }
+.mapa-svg .lbl rect { fill: rgba(255,255,255,.92); stroke: rgba(8,107,113,.28); }
+.mapa-svg .lbl text { font: 700 12.5px var(--font); fill: #086B71; }
+.mapa-svg .cap { font: 800 11px var(--font); fill: #b85a00; paint-order: stroke; stroke: #fff; stroke-width: 3px; }
+.mapa-svg .pulso { fill: #FFE15A; transform-origin: center; transform-box: fill-box; animation: pulso 1.8s ease-out infinite; }
+@keyframes pulso { from { transform: scale(1); opacity: .9; } to { transform: scale(3.2); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .mapa-svg .pulso { animation: none; } }
+.mapa-info { padding: 12px; border-radius: 16px; background: rgba(255,255,255,.78); border: 1px solid #fff; box-shadow: 0 3px 10px rgba(0,100,130,.12); min-height: 54px; }
+.lista-prov summary { cursor: pointer; font-weight: 700; color: var(--ink); padding: 2px; }
+.lista-prov[open] summary { margin-bottom: 10px; }
+
+/* Fondo de ciudad: textos sueltos sobre la foto con su propio vidrio */
+#view > p.muted, #view > .section-title h2 { position: relative; }
+#view > p.muted {
+  background: rgba(255,255,255,.72); padding: 7px 11px; border-radius: 12px; color: var(--ink);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.9);
+}
+.section-title h2 { text-shadow: 0 0 6px #fff, 0 0 14px rgba(255,255,255,.95), 0 1px 0 #fff; }
+.section-title a { background: rgba(255,255,255,.75); padding: 4px 10px; border-radius: 999px; }
+.back { background: rgba(255,255,255,.75); padding: 4px 12px; border-radius: 999px; }
+
+/* Burbujas que se revientan al tocarlas */
+.bubbles span { pointer-events: auto; cursor: pointer; }
+.bubbles span.pop { animation: pop .35s ease-out forwards !important; }
+@keyframes pop { 0% { transform: scale(1); opacity: 1; } 60% { transform: scale(1.35); opacity: .6; } 100% { transform: scale(1.6); opacity: 0; } }
+
+a.chip { text-decoration: none; display: inline-block; }
+
+/* Service worker de Ágora: guarda la app para usarla sin conexión */
+const CACHE = 'agora-v9';
+const ARCHIVOS = ['./', './index.html', './styles.css', './data.js', './app.js', './manifest.webmanifest',
+  './logo.webp', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png',
+  './inicio.webp', './elysia.webp', './provincias.webp', './esfera.webp', './fondo.webp'];
+self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARCHIVOS))); self.skipWaiting(); });
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))));
+  self.clients.claim();
+});
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+    const copia = res.clone();
+    if (res.ok && new URL(e.request.url).origin === location.origin) caches.open(CACHE).then(c => c.put(e.request, copia));
+    return res;
+  }).catch(() => caches.match('./index.html'))));
+});
+
+/* Ágora — app de participación ciudadana (demo educativa, datos ficticios) */
+'use strict';
+
+/* ---------- utilidades ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const num = n => Number(n).toLocaleString('es-AR');
+const pct = n => Math.round(n) + ' %';
+const DIA = 864e5;
+const hoy = () => new Date();
+const NODO = id => NODOS.find(n => n.id === id);
+const PROV = id => PROVINCIAS.find(p => p.id === id);
+const CORTO = { salud: 'Salud', educacion: 'Educación', ambiente: 'Ambiente', seguridad: 'Seguridad', defensa: 'Defensa', justicia: 'Justicia', economia: 'Economía', agro: 'Agro', transporte: 'Transporte', exteriores: 'Exteriores', social: 'Social' };
+const TIPO_COLOR = { 'Crítica': 'orange', 'Idea': '', 'Mejora': 'green', 'Pregunta': 'purple' };
+
+function hashStr(s) { let h = 1779033703 ^ s.length; for (let i = 0; i < s.length; i++) { h = Math.imul(h ^ s.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); } return h >>> 0; }
+function rng(seed) { let a = hashStr(String(seed)); return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const pick = (r, arr) => arr[Math.floor(r() * arr.length)];
+const persona = r => `${pick(r, NOMBRES)} ${pick(r, APELLIDOS)}`;
+const iniciales = n => n.split(/\s+/).map(x => x[0]).slice(0, 2).join('').toUpperCase();
+const colorDe = s => `hsl(${hashStr(s) % 360} 60% 48%)`;
+function hace(dias) {
+  if (dias <= 0) return 'hoy';
+  if (dias === 1) return 'ayer';
+  if (dias < 30) return `hace ${dias} días`;
+  const m = Math.round(dias / 30); return m === 1 ? 'hace un mes' : `hace ${m} meses`;
+}
+const mayus = t => t.charAt(0).toUpperCase() + t.slice(1);
+const fechaLarga = d => d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+const fechaCorta = d => d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' });
+
+/* ---------- estado guardado en el navegador ---------- */
+const KEY = 'agora.v1';
+const vacio = () => ({ user: null, apoyos: {}, votos: {}, propias: [], debates: [], coms: {}, perfil: {}, verProv: null });
+let S = vacio();
+try { S = Object.assign(vacio(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { /* sin almacenamiento */ }
+if (S.user && !PROVINCIAS.some(p => p.id === S.user.prov)) S.user = null;
+if (S.verProv && !PROVINCIAS.some(p => p.id === S.verProv)) S.verProv = null;
+function guardar() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignorar */ } }
+
+/* ---------- generación de datos ficticios por provincia ---------- */
+const cache = {};
+function datosProv(pid) {
+  if (cache[pid]) return cache[pid];
+  const P = PROV(pid), r = rng('niki-' + pid);
+  const umbral = Math.max(1500, Math.round(P.poblacion * 0.005 / 100) * 100);
+  const fill = (s, loc) => s.replaceAll('{loc}', loc).replaceAll('{prov}', P.nombre);
+  const propuestas = [], debates = [], info = {}, tend = {};
+  NODOS.forEach(N => {
+    (PROPUESTAS_MODELO[N.id] || []).forEach((m, i) => {
+      const loc = pick(r, P.localidades), f = 0.06 + r() * 1.3;
+      propuestas.push({ id: `p-${pid}-${N.id}-${i}`, prov: pid, nodo: N.id, tema: N.temas[m.t].n, loc,
+        titulo: fill(m.ti, loc), cuerpo: fill(m.cu, loc), autor: persona(r), apoyos: Math.round(umbral * f), umbral,
+        estado: f >= 1 ? (r() < 0.4 ? 'aprobada' : 'tratamiento') : 'apoyos', dias: 1 + Math.floor(r() * 75) });
+    });
+    (DEBATES_MODELO[N.id] || []).forEach(([tipo, t, ti], i) => {
+      const n = 2 + Math.floor(r() * 4), coms = [];
+      for (let k = 0; k < n; k++) coms.push({ autor: persona(r), texto: pick(r, COMENTARIOS[tipo]), dias: Math.floor(r() * 6) });
+      debates.push({ id: `d-${pid}-${N.id}-${i}`, prov: pid, nodo: N.id, tipo, tema: N.temas[t].n, loc: pick(r, P.localidades),
+        titulo: ti, texto: `${ti}. Lo comparto para que el Nodo de ${N.nombre} de ${P.nombre} lo tenga en cuenta.`, autor: persona(r),
+        coms, vistas: 40 + Math.floor(r() * 900), dias: 1 + Math.floor(r() * 20) });
+    });
+    info[N.id] = { ministro: persona(r), vice: persona(r), presupuesto: Math.round(P.poblacion * (8 + r() * 30) / 1000) * 1000,
+      detecciones: 1 + Math.floor(r() * 7), vivo: r() < 0.45, espectadores: 80 + Math.floor(r() * 1400) };
+    const base = 30 + r() * 70;
+    tend[N.id] = { serie: Array.from({ length: 12 }, (_, k) => Math.round(base * (0.6 + 0.5 * Math.sin(k / 2 + r() * 2) * 0.5 + r() * 0.5 + k * 0.03) * P.poblacion / 400000)),
+      criticas: Math.round(base * (0.5 + r())), ideas: Math.round(base * (0.4 + r())), mejoras: Math.round(base * (0.3 + r() * 0.8)) };
+  });
+  return (cache[pid] = { P, umbral, propuestas, debates, info, tend });
+}
+function propuestasDe(pid) { return datosProv(pid).propuestas.concat(S.propias.filter(p => p.prov === pid)); }
+function debatesDe(pid) { return datosProv(pid).debates.concat(S.debates.filter(d => d.prov === pid)); }
+function buscarPropuesta(id) { const u = S.propias.find(p => p.id === id); if (u) return u; const pid = id.split('-')[1]; return PROV(pid) ? datosProv(pid).propuestas.find(p => p.id === id) : null; }
+function buscarDebate(id) { const u = S.debates.find(d => d.id === id); if (u) return u; const pid = id.split('-')[1]; return PROV(pid) ? datosProv(pid).debates.find(d => d.id === id) : null; }
+const apoyosDe = p => p.apoyos + (S.apoyos[p.id] ? 1 : 0);
+
+/* Elysia: sugiere nodo y tema según palabras clave (la persona confirma) */
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+function clasificar(texto) {
+  const t = ' ' + norm(texto) + ' '; let mejor = null;
+  NODOS.forEach(N => N.temas.forEach(T => {
+    let pts = 0; T.k.forEach(k => { if (t.includes(norm(k))) pts += k.length > 6 ? 2 : 1; });
+    if (pts && (!mejor || pts > mejor.pts)) mejor = { nodo: N.id, tema: T.n, pts };
+  }));
+  return mejor;
+}
+
+/* ---------- mandato de Elysia: cuenta progresiva y regresiva ---------- */
+function partes(desde, hasta) {
+  if (hasta < desde) return { a: 0, m: 0, d: 0, h: 0, mi: 0, s: 0 };
+  let a = hasta.getFullYear() - desde.getFullYear(), base = new Date(desde);
+  base.setFullYear(desde.getFullYear() + a);
+  if (base > hasta) { a--; base = new Date(desde); base.setFullYear(desde.getFullYear() + a); }
+  let m = 0;
+  for (;;) { const n = new Date(base); n.setMonth(n.getMonth() + 1); if (n > hasta) break; base = n; m++; }
+  let ms = hasta - base; const d = Math.floor(ms / DIA); ms -= d * DIA;
+  const h = Math.floor(ms / 36e5); ms -= h * 36e5; const mi = Math.floor(ms / 6e4); ms -= mi * 6e4;
+  return { a, m, d, h, mi, s: Math.floor(ms / 1000) };
+}
+const UNID = [['a', 'años'], ['m', 'meses'], ['d', 'días'], ['h', 'horas'], ['mi', 'min'], ['s', 'seg']];
+function contadorHTML(modo) {
+  return `<div class="counter six ${modo === 'resta' ? 'down' : ''}" data-count="${modo}">${UNID.map(([k, l]) => `<div><b data-u="${k}">0</b><span>${l}</span></div>`).join('')}</div>`;
+}
+function avanceMandato() { const t = hoy(); return Math.min(100, Math.max(0, (t - MANDATO.inicio) / (MANDATO.fin - MANDATO.inicio) * 100)); }
+function textoResta() {
+  const p = partes(hoy(), MANDATO.fin);
+  return `${p.a} ${p.a === 1 ? 'año' : 'años'}, ${p.m} ${p.m === 1 ? 'mes' : 'meses'} y ${p.d} ${p.d === 1 ? 'día' : 'días'}`;
+}
+function tickContadores() {
+  const t = hoy();
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const p = el.dataset.count === 'lleva' ? partes(MANDATO.inicio, t) : partes(t, MANDATO.fin);
+    el.querySelectorAll('[data-u]').forEach(b => { b.textContent = String(p[b.dataset.u]).padStart(b.dataset.u === 'a' || b.dataset.u === 'm' || b.dataset.u === 'd' ? 1 : 2, '0'); });
+  });
+  document.querySelectorAll('[data-avance]').forEach(el => { el.style.width = avanceMandato().toFixed(3) + '%'; });
+  document.querySelectorAll('[data-avance-txt]').forEach(el => { el.textContent = avanceMandato().toFixed(4).replace('.', ',') + ' %'; });
+  document.querySelectorAll('[data-resta-txt]').forEach(el => { el.textContent = textoResta(); });
+}
+setInterval(tickContadores, 1000);
+
+/* ---------- gráficos SVG ---------- */
+function barrasH(items, { max, sufijo = '' } = {}) {
+  const w = 340, fila = 28, lab = 92, h = items.length * fila + 6, m = max || Math.max(...items.map(i => i.v), 1);
+  const ancho = w - lab - 46;
+  return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Gráfico de barras">
+    <defs><linearGradient id="gl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".5" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity=".08"/></linearGradient></defs>
+    ${items.map((it, i) => { const y = i * fila + 4, bw = Math.max(3, it.v / m * ancho);
+      return `<text x="${lab - 6}" y="${y + 15}" text-anchor="end" font-size="12" fill="#0b3a4a">${esc(it.l)}</text>
+      <rect x="${lab}" y="${y + 2}" width="${ancho}" height="18" rx="9" fill="rgba(255,255,255,.6)"/>
+      <rect x="${lab}" y="${y + 2}" width="${bw}" height="18" rx="9" fill="${it.c}"/>
+      <rect x="${lab}" y="${y + 2}" width="${bw}" height="18" rx="9" fill="url(#gl)"/>
+      <text x="${lab + bw + 5}" y="${y + 15}" font-size="11.5" font-weight="700" fill="#0b3a4a">${esc(num(it.v))}${sufijo}</text>`; }).join('')}
+  </svg>`;
+}
+function barrasApiladas(items) {
+  const w = 340, fila = 28, lab = 92, h = items.length * fila + 6, ancho = w - lab - 6;
+  const cols = ['#ff9a1f', '#14b8c4', '#4cc35a'];
+  return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Críticas, ideas y mejoras por nodo">
+    ${items.map((it, i) => { const y = i * fila + 4, tot = it.p.reduce((a, b) => a + b, 0) || 1; let x = lab;
+      return `<text x="${lab - 6}" y="${y + 15}" text-anchor="end" font-size="12" fill="#0b3a4a">${esc(it.l)}</text>` +
+        it.p.map((v, k) => { const bw = v / tot * ancho; const r = `<rect x="${x}" y="${y + 2}" width="${bw}" height="18" fill="${cols[k]}"><title>${num(v)}</title></rect>`; x += bw; return r; }).join('') +
+        `<rect x="${lab}" y="${y + 2}" width="${ancho}" height="9" fill="rgba(255,255,255,.35)"/>`; }).join('')}
+  </svg>
+  <div class="legend"><span><i style="background:#ff9a1f"></i>Críticas</span><span><i style="background:#14b8c4"></i>Ideas</span><span><i style="background:#4cc35a"></i>Mejoras</span></div>`;
+}
+function linea(vals, color = '#14b8c4') {
+  const w = 340, h = 170, pl = 30, pr = 10, pt = 12, pb = 26, mx = Math.max(...vals) * 1.15 || 1;
+  const meses = [], d = hoy();
+  for (let i = 11; i >= 0; i--) { const x = new Date(d.getFullYear(), d.getMonth() - i, 1); meses.push(x.toLocaleDateString('es-AR', { month: 'short' }).replace('.', '')); }
+  const X = i => pl + i * (w - pl - pr) / 11, Y = v => pt + (1 - v / mx) * (h - pt - pb);
+  const pts = vals.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+  const gid = 'lg' + hashStr(color + vals.join());
+  return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Actividad de los últimos 12 meses">
+    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".45"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    ${[0, .5, 1].map(f => `<line x1="${pl}" x2="${w - pr}" y1="${Y(mx * f / 1.15)}" y2="${Y(mx * f / 1.15)}" stroke="rgba(10,143,156,.15)"/>
+      <text x="${pl - 4}" y="${Y(mx * f / 1.15) + 4}" text-anchor="end" font-size="10" fill="#3f6775">${num(Math.round(mx * f / 1.15))}</text>`).join('')}
+    <polygon points="${X(0)},${h - pb} ${pts} ${X(11)},${h - pb}" fill="url(#${gid})"/>
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    ${vals.map((v, i) => `<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="#fff" stroke="${color}" stroke-width="2"><title>${meses[i]}: ${num(v)}</title></circle>`).join('')}
+    ${meses.map((m, i) => i % 2 === 0 ? `<text x="${X(i)}" y="${h - 8}" text-anchor="middle" font-size="10" fill="#3f6775">${m}</text>` : '').join('')}
+  </svg>`;
+}
+
+/* ---------- piezas comunes ---------- */
+const DEMO = `<div class="demo-ribbon"><span>⚠️</span><span><b>Demostración educativa.</b> Niki, sus provincias, usuarios, propuestas y votos son ficticios. Ágora no es un sistema electoral oficial ni seguro.</span></div>`;
+const volver = (href, txt = 'Volver') => `<a class="link back" href="${href}">‹ ${esc(txt)}</a>`;
+function tarjetaPropuesta(p) {
+  const N = NODO(p.nodo), a = apoyosDe(p), f = Math.min(100, a / p.umbral * 100);
+  const est = p.estado === 'aprobada' ? '<span class="badge green">Aprobada por el nodo</span>' : p.estado === 'tratamiento' ? '<span class="badge purple">En tratamiento</span>' : '<span class="badge outline">Juntando apoyos</span>';
+  return `<a class="item" href="#/propuesta/${p.id}">
+    <div class="meta"><span class="badge" style="background:${N.color}">${N.icono} ${esc(CORTO[N.id])}</span><span class="badge outline">${esc(p.tema)}</span>${est}</div>
+    <h3>${esc(p.titulo)}</h3>
+    <div class="muted small">📍 ${esc(p.loc)} · ${esc(p.autor)} · ${hace(p.dias)}</div>
+    <div class="progress ${f >= 100 ? '' : 'turq'}" style="margin-top:8px"><i style="width:${f}%"></i></div>
+    <div class="muted small" style="margin-top:4px">${num(a)} apoyos de ${num(p.umbral)} necesarios ${S.apoyos[p.id] ? '· ✔ Apoyaste' : ''}</div>
+  </a>`;
+}
+function tarjetaDebate(d) {
+  const n = d.coms.length + (S.coms[d.id] || []).length;
+  return `<a class="item" href="#/debate/${d.id}">
+    <div class="meta"><span class="badge ${TIPO_COLOR[d.tipo]}">${esc(d.tipo)}</span><span class="badge outline">${esc(d.tema)}</span></div>
+    <h3>${esc(d.titulo)}</h3>
+    <div class="muted small">📍 ${esc(d.loc)} · ${esc(d.autor)} · 💬 ${n} · 👁 ${num(d.vistas)}</div>
+  </a>`;
+}
+function comentarioHTML(c) {
+  return `<div class="comment row" style="align-items:flex-start"><div class="avatar" style="background:${colorDe(c.autor)}">${esc(iniciales(c.autor))}</div>
+    <div class="grow"><div class="who">${esc(c.autor)} <small>· ${hace(c.dias || 0)}</small></div><div>${esc(c.texto)}</div></div></div>`;
+}
+function provGrid() {
+  return `<div class="prov-grid">${PROVINCIAS.map((p, i) => `<a class="prov-card" style="--c:${p.color}" href="#/provincia/${p.id}">
+    <span class="num">${String(i + 1).padStart(2, '0')}</span><b>${esc(p.nombre)}</b><span>${esc(p.tipo || 'Provincia')} · ${esc(p.capital)}</span></a>`).join('')}</div>`;
+}
+
+/* Mapa de Niki: silueta inspirada en un casco de F1 visto de perfil */
+let mapaSel = null;
+function infoMapa() {
+  const p = PROV(mapaSel);
+  if (!p) return `<p class="muted" style="margin:0;text-align:center">👆 Tocá una provincia del casco para conocerla.</p>`;
+  return `<div class="row"><div class="orb sm" style="--c:${p.color}">${p.tipo ? '⭐' : '📍'}</div>
+    <div class="grow"><b style="font-size:17px">${esc(p.nombre)}</b> ${p.tipo ? '<span class="badge yellow">Distrito Capital</span>' : ''}
+    <div class="muted small">Capital: ${esc(p.capital)} · ${num(p.poblacion)} hab. · ${p.localidades.length} localidades</div></div></div>
+    <p class="small">${esc(p.lema)}</p>
+    <a class="btn block" href="#/provincia/${p.id}">Entrar a ${esc(p.nombre)} ›</a>`;
+}
+function mapaNiki() {
+  const lineas = [70, 120, 170, 220, 270, 320, 370].map((y, i) =>
+    `<path d="M-60 ${y} q40 ${i % 2 ? -6 : 6} 80 0" /><path d="M${545 + (i % 3) * 8} ${y + 14} q30 ${i % 2 ? 5 : -5} 60 0" />`).join('');
+  const etiquetas = PROVINCIAS.map(p => {
+    const w = p.nombre.length * 7.4 + 14, [x, y] = p.lbl;
+    return `<g class="lbl" transform="translate(${x} ${y})"><rect x="${-w / 2}" y="-11" width="${w}" height="21" rx="10.5"/><text y="4" text-anchor="middle">${esc(p.nombre)}</text></g>`;
+  }).join('');
+  return `<div class="glass mapa" id="mapa">
+    <div class="mapa-head"><b>NIKI · Mapa de provincias</b><span class="muted small">13 provincias</span></div>
+    <svg class="mapa-svg" viewBox="-60 0 680 440" role="group" aria-label="Mapa de Niki con sus 13 provincias">
+      <defs>
+        <clipPath id="casco"><polygon points="${SILUETA}"/></clipPath>
+        <linearGradient id="brillo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <filter id="sombraCasco" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#086B71" flood-opacity=".28"/></filter>
+      </defs>
+      <g class="velocidad">${lineas}</g>
+      <polygon points="${SILUETA}" fill="#fff" filter="url(#sombraCasco)"/>
+      ${PROVINCIAS.map(p => `<g class="prov-shape ${mapaSel === p.id ? 'on' : ''}" data-act="mapa" data-prov="${p.id}" tabindex="0" role="button" aria-label="${esc(p.nombre)}${p.tipo ? ', Distrito Capital' : ''}"><polygon points="${p.poly}" style="--c:${p.color}"/></g>`).join('')}
+      <rect clip-path="url(#casco)" x="0" y="0" width="560" height="170" fill="url(#brillo)" pointer-events="none"/>
+      <polygon points="${SILUETA}" fill="none" stroke="#086B71" stroke-width="7" stroke-linejoin="round" pointer-events="none"/>
+      <g pointer-events="none">${etiquetas}
+        <circle class="pulso" cx="${CAPITAL_XY[0]}" cy="${CAPITAL_XY[1]}" r="7"/>
+        <circle cx="${CAPITAL_XY[0]}" cy="${CAPITAL_XY[1]}" r="7" fill="#FF922E" stroke="#fff" stroke-width="3"/>
+        <text class="cap" x="${CAPITAL_XY[0]}" y="${CAPITAL_XY[1] + 24}" text-anchor="middle">★ Capital</text>
+      </g>
+    </svg>
+    <div class="mapa-info" id="mapaInfo">${infoMapa()}</div>
+    <p class="muted small" style="margin-bottom:0">La silueta de Niki se inspira en un casco de Fórmula 1 visto de perfil.</p>
+  </div>
+  <details class="glass tight lista-prov"><summary>Ver la lista de provincias</summary>${provGrid()}</details>`;
+}
+
+const fechaEn = dias => new Date(hoy().getTime() + dias * DIA);
+
+/* ---------- vistas ---------- */
+const V = {};
+
+V.inicio = () => {
+  const d = hoy(), feat = BOLETIN.find(b => b.destacado);
+  return `
+  <section class="glass hero photo-bg" style="--img:url(inicio.webp)">
+    <img class="logo" src="logo.webp" alt="Logo de Ágora">
+    <h1>Bienvenidos a Ágora</h1>
+    <p class="sub">La plataforma de participación ciudadana de la <b>República de Niki</b>, en la Lumencracia. Informate, proponé y debatí con tu provincia.</p>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn" href="#/provincias">Elegir mi provincia</a>
+      <a class="btn orange" href="#/elysia">Mandato de Elysia</a>
+    </div>
+  </section>
+  ${DEMO}
+  <a class="glass tight item" href="#/elysia" style="display:block">
+    <div class="row"><div class="orb sm" style="--c:#8a5cd6">✨</div>
+      <div class="grow"><b>Elysia · Perfil «${esc(MANDATO.programa)}»</b>
+        <div class="muted small">Quedan <span data-resta-txt>${textoResta()}</span> de mandato</div></div></div>
+    <div class="progress orange" style="margin-top:10px"><i data-avance style="width:${avanceMandato()}%"></i></div>
+  </a>
+
+  <div class="section-title"><h2>📰 Boletín Oficial</h2><a href="#/boletin">Ver todo</a></div>
+  <p class="muted" style="margin:0 2px 8px">${mayus(fechaLarga(d))}</p>
+  <div class="card-list">
+    ${noticiaHTML(feat, true)}
+    ${BOLETIN.filter(b => !b.destacado).slice(0, 3).map(b => noticiaHTML(b)).join('')}
+  </div>
+
+  <div class="section-title"><h2>📅 Calendario del mes</h2></div>
+  <div class="glass" id="cal">${calendarioHTML()}</div>
+
+  <div class="section-title"><h2>🗳️ Consultas abiertas</h2><a href="#/consultas">Ver todas</a></div>
+  <div class="card-list">${CONSULTAS_MODELO.filter(c => c.alcance === 'nacional').map(c => tarjetaConsulta(c, 'lumina')).join('')}</div>
+
+  <div class="section-title" id="provincias"><h2>🗺️ Las 13 provincias de Niki</h2></div>
+  <div class="photo-strip" style="--img:url(provincias.webp)"><span>Un país federal, conectado y sustentable</span></div>
+  <p class="muted" style="margin:0 2px 10px">Tocá tu provincia en el mapa para ver sus localidades, sus nodos, las propuestas y los debates.</p>
+  ${mapaNiki()}
+  ${pie()}`;
+};
+
+function noticiaHTML(b, feat) {
+  return `<button class="item ${feat ? 'news-feature open' : ''}" data-act="toggle">
+    <div class="meta"><span class="news-cat">${esc(b.cat)}</span><span class="news-date">· ${b.d === 0 ? 'Hoy' : b.d === 1 ? 'Ayer' : fechaCorta(fechaEn(-b.d))}</span>${feat ? '<span class="badge orange">Destacado</span>' : ''}</div>
+    <h3>${esc(b.ti)}</h3><div class="news-body">${esc(b.cu)}</div>
+  </button>`;
+}
+
+let calSel = null;
+function eventosDelMes() {
+  const d = hoy(), ult = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  const ev = EVENTOS_MES.map(e => ({ ...e, dia: Math.min(e.dia, ult) }));
+  ev.push({ dia: d.getDate(), tipo: 'vivo', ti: 'Sesión en vivo del Nodo de Transportes y Comunicaciones', lugar: 'Todas las provincias · en Ágora' });
+  return ev.sort((a, b) => a.dia - b.dia);
+}
+function calendarioHTML() {
+  const d = hoy(), y = d.getFullYear(), m = d.getMonth(), primero = (new Date(y, m, 1).getDay() + 6) % 7, ult = new Date(y, m + 1, 0).getDate();
+  const ev = eventosDelMes(), sel = calSel || d.getDate();
+  const delDia = ev.filter(e => e.dia === sel), prox = ev.filter(e => e.dia >= d.getDate()).slice(0, 4);
+  let celdas = '';
+  for (let i = 0; i < primero; i++) celdas += '<div class="cal-day empty"></div>';
+  for (let n = 1; n <= ult; n++) {
+    const k = ev.filter(e => e.dia === n).length;
+    celdas += `<button class="cal-day ${n === d.getDate() ? 'today' : ''} ${n === sel ? 'sel' : ''}" data-act="cal" data-dia="${n}" aria-label="${n}${k ? ', ' + k + ' eventos' : ''}">${n}${k ? `<span class="dots">${'<i></i>'.repeat(Math.min(k, 3))}</span>` : ''}</button>`;
+  }
+  const evHTML = e => `<div class="ev"><div class="d">${e.dia}<small>${new Date(y, m, e.dia).toLocaleDateString('es-AR', { weekday: 'short' }).replace('.', '')}</small></div><div><b>${esc(e.ti)}</b><div class="muted small">${esc(e.lugar)}</div></div></div>`;
+  return `<div class="cal-head"><h3>${mayus(d.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' }))}</h3><span class="muted small">Tocá un día</span></div>
+    <div class="cal-grid">${['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(x => `<div class="dow">${x}</div>`).join('')}${celdas}</div>
+    <div style="margin-top:12px"><b>${sel === d.getDate() ? 'Hoy' : `El ${sel}`}</b>
+      ${delDia.length ? delDia.map(evHTML).join('') : '<p class="muted">No hay eventos ese día.</p>'}</div>
+    <div style="margin-top:10px"><b>Próximos eventos</b>${prox.map(evHTML).join('')}</div>`;
+}
+
+V.boletin = () => `
+  ${volver('#/', 'Inicio')}
+  <div class="photo-strip" style="--img:url(boletin.webp)"><span>Boletín Oficial</span></div>
+  <div class="section-title"><h2>📰 Boletín Oficial de Niki</h2></div>
+  <p class="muted" style="margin:0 2px 10px">Comunicaciones de los órganos del Estado que la ciudadanía necesita conocer. Tocá cada aviso para leerlo completo.</p>
+  <div class="card-list">${BOLETIN.map(b => noticiaHTML(b, b.destacado)).join('')}</div>
+  <div class="section-title"><h2>📅 Calendario</h2></div>
+  <div class="glass" id="cal">${calendarioHTML()}</div>
+  ${pie()}`;
+
+V.provincias = () => `
+  ${volver('#/', 'Inicio')}
+  <div class="photo-strip" style="--img:url(provincias.webp)"><span>República de Niki</span></div>
+  <div class="section-title"><h2>🗺️ Elegí tu provincia</h2></div>
+  <p class="muted" style="margin:0 2px 10px">Niki es un Estado federal con 13 provincias. Cada una organiza sus propios nodos y tiene su propia instancia de Elysia.</p>
+  ${mapaNiki()}${pie()}`;
+
+V.provincia = (pid) => {
+  if (!PROV(pid)) return noEncontrado();
+  const D = datosProv(pid), P = D.P;
+  S.verProv = pid; guardar();
+  const loc = S.locFiltro && P.localidades.includes(S.locFiltro) ? S.locFiltro : null;
+  const props = propuestasDe(pid).filter(p => !loc || p.loc === loc).sort((a, b) => apoyosDe(b) - apoyosDe(a));
+  const enVivo = NODOS.filter(N => D.info[N.id].vivo);
+  const esMia = S.user && S.user.prov === pid;
+  return `
+  ${volver('#/provincias', 'Provincias')}
+  <section class="banner" style="--c:${P.color}">
+    <div class="small" style="opacity:.95">${esc(P.tipo || 'Provincia')} de la República de Niki</div>
+    <h1>${esc(P.nombre)}</h1>
+    <div>${esc(P.lema)}</div>
+    <div class="kv"><span>🏛️ Capital: <b>${esc(P.capital)}</b></span><span>👥 ${num(P.poblacion)} hab.</span><span>📍 ${P.localidades.length} localidades</span></div>
+  </section>
+  ${esMia ? `<div class="glass tight">✅ Participás como vecino/a de <b>${esc(S.user.loc)}</b>.</div>` :
+    `<div class="glass tight"><div class="row"><div class="grow small">${S.user ? `Tu provincia es <b>${esc(PROV(S.user.prov).nombre)}</b>. Acá podés mirar, pero solo participás en tu provincia.` : '¿Vivís acá? Registrate (ficticio) para proponer, apoyar y debatir.'}</div>
+    ${S.user ? `<a class="btn small ghost" href="#/provincia/${S.user.prov}">Ir a la mía</a>` : `<button class="btn small" data-act="registro" data-prov="${pid}">Participar</button>`}</div></div>`}
+
+  <div class="section-title"><h2>📍 Localidades</h2></div>
+  <div class="chips">
+    <button class="chip ${!loc ? 'on' : ''}" data-act="loc" data-loc="">Todas</button>
+    ${P.localidades.map(l => `<button class="chip ${loc === l ? 'on' : ''}" data-act="loc" data-loc="${esc(l)}">${esc(l)}</button>`).join('')}
+  </div>
+
+  <div class="section-title"><h2>🔷 Nodos de ${esc(P.nombre)}</h2></div>
+  <div class="glass"><div class="nodo-grid">${NODOS.map(N => `<a class="nodo-tile" href="#/provincia/${pid}/nodo/${N.id}/info"><div class="orb" style="--c:${N.color}">${N.icono}</div>${esc(N.nombre)}</a>`).join('')}</div></div>
+
+  ${enVivo.length ? `<div class="section-title"><h2>🔴 En vivo ahora</h2></div>
+  <div class="card-list">${enVivo.slice(0, 3).map(N => `<a class="item" href="#/provincia/${pid}/nodo/${N.id}/vivo"><div class="row"><div class="orb sm" style="--c:${N.color}">${N.icono}</div><div class="grow"><b>Sesión abierta · Nodo de ${esc(N.nombre)}</b><div class="muted small">👁 ${num(D.info[N.id].espectadores)} mirando</div></div><span class="badge red">EN VIVO</span></div></a>`).join('')}</div>` : ''}
+
+  <div class="section-title"><h2>💡 Iniciativas ${loc ? 'en ' + esc(loc) : 'más apoyadas'}</h2><a href="#/iniciativas/${pid}">Ver todas</a></div>
+  <div class="card-list">${props.slice(0, 4).map(tarjetaPropuesta).join('') || '<p class="empty-note">Todavía no hay iniciativas en esta localidad.</p>'}</div>
+  ${esMia || !S.user ? `<div class="btn-row"><button class="btn green block" data-act="nueva" data-prov="${pid}">＋ Presentar una iniciativa</button></div>` : ''}
+  ${pie()}`;
+};
+
+V.nodo = (pid, nid, tab = 'info') => {
+  if (!PROV(pid) || !NODO(nid)) return noEncontrado();
+  const D = datosProv(pid), P = D.P, N = NODO(nid);
+  const I = D.info[nid], base = `#/provincia/${pid}/nodo/${nid}`;
+  const tabs = [['info', 'Información'], ['propuestas', 'Propuestas'], ['debates', 'Debates'], ['vivo', 'En vivo'], ['tendencias', 'Tendencias']];
+  let cuerpo = '';
+  if (tab === 'info') {
+    cuerpo = `
+    <div class="glass">
+      <h3>🏛️ Parte legislativa</h3><p>Encabezada por el ministro <b>${esc(I.ministro)}</b>. Crea las leyes de ${esc(N.nombre.toLowerCase())} de ${esc(P.nombre)}, que se guardan en su carpeta de Evanescence.</p>
+      <h3 style="margin-top:12px">⚙️ Parte ejecutiva</h3><p>A cargo de la viceministra o viceministro <b>${esc(I.vice)}</b>. Aplica las leyes y lleva adelante las políticas públicas del área.</p>
+      <div class="kpis"><div><b>N$ ${num(Math.round(I.presupuesto / 1e6))} M</b><span>Presupuesto</span></div><div><b>${I.detecciones}</b><span>Detecciones de Elysia</span></div><div><b>90 días</b><span>Plazo para tratarlas</span></div></div>
+    </div>
+    <div class="glass"><h3>📂 Leyes vigentes (carpeta en Evanescence)</h3>
+      <ul class="list-check">${LEYES_MODELO[nid].map(l => `<li>${esc(l)} de ${esc(P.nombre)}</li>`).join('')}</ul>
+      <p class="muted small">Las leyes de los nodos están por debajo de Evanescence y de los códigos generales.</p></div>
+    <div class="glass"><h3>🏷️ Temas de este nodo</h3><div class="chips" style="flex-wrap:wrap">${N.temas.map(t => `<a class="chip" href="${base}/propuestas?tema=${encodeURIComponent(t.n)}">${esc(t.n)}</a>`).join('')}</div>
+      <p class="muted small">Cada reclamo, idea o debate se ordena por tema. Por ejemplo, una queja sobre trenes va a Transportes › Trenes.</p></div>`;
+  } else if (tab === 'propuestas') {
+    const tema = new URLSearchParams(location.hash.split('?')[1] || '').get('tema');
+    const lista = propuestasDe(pid).filter(p => p.nodo === nid && (!tema || p.tema === tema)).sort((a, b) => apoyosDe(b) - apoyosDe(a));
+    cuerpo = `<div class="chips"><a class="chip ${!tema ? 'on' : ''}" href="${base}/propuestas">Todos</a>${N.temas.map(t => `<a class="chip ${tema === t.n ? 'on' : ''}" href="${base}/propuestas?tema=${encodeURIComponent(t.n)}">${esc(t.n)}</a>`).join('')}</div>
+      <div class="card-list">${lista.map(tarjetaPropuesta).join('') || '<p class="empty-note">No hay iniciativas en este tema todavía.</p>'}</div>
+      <div class="btn-row"><button class="btn green block" data-act="nueva" data-prov="${pid}" data-nodo="${nid}">＋ Presentar una iniciativa</button></div>`;
+  } else if (tab === 'debates') {
+    const lista = debatesDe(pid).filter(d => d.nodo === nid);
+    cuerpo = `<p class="muted" style="margin:0 2px 8px">Críticas, ideas, mejoras y preguntas sobre la gestión del nodo. Elysia no modera los debates.</p>
+      <div class="card-list">${lista.map(tarjetaDebate).join('')}</div>
+      <div class="btn-row"><button class="btn block" data-act="nuevo-debate" data-prov="${pid}" data-nodo="${nid}">＋ Abrir un debate</button></div>`;
+  } else if (tab === 'vivo') {
+    cuerpo = `
+      <div class="stream"><span class="live">EN VIVO</span><span class="viewers">👁 <span id="viewers">${num(I.espectadores)}</span></span>
+        <div class="podium"><i></i><i></i><i></i></div>
+        <div class="caption"><b>Sesión abierta del Nodo de ${esc(N.nombre)} · ${esc(P.nombre)}</b><br>Tema: ${esc(N.temas[0].n)} y respuestas a las iniciativas con más apoyos</div></div>
+      <p class="muted small" style="margin:8px 2px">Transmisión simulada. Las sesiones reales también se pueden seguir en los puntos de atención presencial de cada municipio.</p>
+      <div class="glass tight"><b>💬 Chat de la sesión</b><div class="chat" id="chat"></div>
+        <form class="inline-form" data-form="chat"><input class="in" name="t" maxlength="200" placeholder="${S.user ? 'Escribí tu comentario…' : 'Registrate para comentar'}" ${S.user ? '' : 'disabled'} aria-label="Comentario">
+        <button class="btn small" ${S.user ? '' : 'disabled'}>Enviar</button></form></div>`;
+  } else if (tab === 'tendencias') {
+    const T = D.tend[nid], temas = N.temas.map((t, i) => ({ l: t.n.length > 13 ? t.n.slice(0, 12) + '…' : t.n, v: Math.round((T.criticas + T.ideas + T.mejoras) * (0.35 + rng(pid + nid + i)() * 0.65)), c: N.color }));
+    cuerpo = `
+      <div class="glass"><h3>Actividad ciudadana · últimos 12 meses</h3><p class="muted small">Propuestas, comentarios y apoyos en el Nodo de ${esc(N.nombre)} de ${esc(P.nombre)}.</p>${linea(T.serie, N.color)}</div>
+      <div class="glass"><h3>Tipo de participación</h3>${barrasApiladas([{ l: CORTO[nid], p: [T.criticas, T.ideas, T.mejoras] }])}
+        <div class="kpis"><div><b>${num(T.criticas)}</b><span>Críticas</span></div><div><b>${num(T.ideas)}</b><span>Ideas</span></div><div><b>${num(T.mejoras)}</b><span>Mejoras</span></div></div></div>
+      <div class="glass"><h3>Temas más mencionados</h3>${barrasH(temas)}</div>`;
+  }
+  return `
+  ${volver('#/provincia/' + pid, P.nombre)}
+  <section class="banner" style="--c:${N.color}"><div class="row"><div class="orb lg" style="--c:${N.color}">${N.icono}</div>
+    <div class="grow"><div class="small">Nodo · ${esc(P.nombre)}</div><h1 style="font-size:22px">${esc(N.nombre)}</h1>${I.vivo ? '<span class="badge red">● EN VIVO</span>' : ''}</div></div></section>
+  <nav class="tabs">${tabs.map(([k, l]) => `<a class="${k === tab ? 'on' : ''}" href="${base}/${k}">${l}</a>`).join('')}</nav>
+  ${cuerpo}${pie()}`;
+};
+
+V.propuesta = (id) => {
+  const p = buscarPropuesta(id); if (!p) return noEncontrado();
+  const N = NODO(p.nodo), P = PROV(p.prov), a = apoyosDe(p), f = Math.min(100, a / p.umbral * 100);
+  const puedo = S.user && S.user.prov === p.prov, coms = S.coms[p.id] || [];
+  const r = rng('imp' + p.id), costo = Math.round((2 + r() * 40) * 10) / 10, benef = Math.round(P.poblacion * (0.02 + r() * 0.2));
+  return `
+  ${volver(`#/provincia/${p.prov}/nodo/${p.nodo}/propuestas`, 'Nodo de ' + N.nombre)}
+  <article class="glass">
+    <div class="meta" style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge" style="background:${N.color}">${N.icono} ${esc(N.nombre)}</span><span class="badge outline">${esc(p.tema)}</span></div>
+    <h2 style="margin:10px 0 6px;color:#06606f">${esc(p.titulo)}</h2>
+    <div class="muted small">📍 ${esc(p.loc)}, ${esc(P.nombre)} · Iniciativa de ${esc(p.autor)} · ${hace(p.dias)}</div>
+    <p style="margin-top:12px">${esc(p.cuerpo)}</p>
+    <div class="progress ${f >= 100 ? '' : 'turq'}" style="margin-top:14px"><i style="width:${f}%"></i></div>
+    <p class="small"><b>${num(a)}</b> apoyos de <b>${num(p.umbral)}</b> necesarios (0,5 % de la población de ${esc(P.nombre)}). ${f >= 100 ? 'Superó el umbral: el nodo debe tratarla.' : ''}</p>
+    <div class="btn-row">
+      ${puedo ? `<button class="btn ${S.apoyos[p.id] ? 'ghost' : 'green'}" data-act="apoyar" data-id="${p.id}">${S.apoyos[p.id] ? '✔ Apoyaste · quitar' : '👍 Apoyar'}</button>` :
+        S.user ? `<span class="muted small">Solo pueden apoyar quienes viven en ${esc(P.nombre)}.</span>` : `<button class="btn green" data-act="registro" data-prov="${p.prov}">👍 Registrarme para apoyar</button>`}
+      <button class="btn ghost" data-act="compartir">Compartir</button>
+    </div>
+  </article>
+  <div class="glass tight"><div class="row"><div class="orb sm" style="--c:#8a5cd6">✨</div><div class="grow"><b>Informe de impacto de Elysia</b> <span class="badge gray">No vinculante</span>
+    <div class="small">Costo estimado: <b>N$ ${String(costo).replace('.', ',')} M</b> · Personas alcanzadas: <b>${num(benef)}</b>. El informe orienta, pero la decisión es del nodo y de la ciudadanía.</div></div></div></div>
+  <div class="glass"><h3>💬 Comentarios (${coms.length})</h3>
+    ${coms.map(comentarioHTML).join('') || '<p class="muted">Todavía no hay comentarios. ¡Sé la primera persona en opinar!</p>'}
+    ${puedo ? `<form class="inline-form" data-form="com" data-id="${p.id}"><input class="in" name="t" maxlength="400" placeholder="Escribí un comentario" aria-label="Comentario"><button class="btn small">Enviar</button></form>` : ''}
+  </div>${pie()}`;
+};
+
+V.debate = (id) => {
+  const d = buscarDebate(id); if (!d) return noEncontrado();
+  const N = NODO(d.nodo), P = PROV(d.prov), puedo = S.user && S.user.prov === d.prov;
+  const coms = d.coms.concat(S.coms[d.id] || []);
+  return `
+  ${volver(`#/provincia/${d.prov}/nodo/${d.nodo}/debates`, 'Debates de ' + N.nombre)}
+  <article class="glass">
+    <div class="meta" style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge ${TIPO_COLOR[d.tipo]}">${esc(d.tipo)}</span><span class="badge" style="background:${N.color}">${N.icono} ${esc(CORTO[N.id])}</span><span class="badge outline">${esc(d.tema)}</span></div>
+    <h2 style="margin:10px 0 6px;color:#06606f">${esc(d.titulo)}</h2>
+    <div class="muted small">📍 ${esc(d.loc)}, ${esc(P.nombre)} · ${esc(d.autor)} · ${hace(d.dias)}</div>
+    <p style="margin-top:10px">${esc(d.texto)}</p>
+  </article>
+  <div class="glass"><h3>Respuestas (${coms.length})</h3>${coms.map(comentarioHTML).join('')}
+    ${puedo ? `<form class="inline-form" data-form="com" data-id="${d.id}"><input class="in" name="t" maxlength="400" placeholder="Sumá tu opinión" aria-label="Respuesta"><button class="btn small">Responder</button></form>` :
+      `<p class="muted small">${S.user ? `Solo participan vecinos de ${esc(P.nombre)}.` : 'Registrate para responder.'}</p>`}
+  </div>${pie()}`;
+};
+
+V.iniciativas = (pid) => {
+  pid = PROV(pid) ? pid : (S.user?.prov || S.verProv || 'lumina');
+  const P = PROV(pid), q = new URLSearchParams(location.hash.split('?')[1] || ''), nodo = q.get('nodo') || '', orden = q.get('orden') || 'apoyos';
+  const lista = propuestasDe(pid).filter(p => !nodo || p.nodo === nodo).sort((a, b) => orden === 'recientes' ? a.dias - b.dias : apoyosDe(b) - apoyosDe(a));
+  return `
+  <div class="section-title"><h2>💡 Iniciativas populares</h2></div>
+  <p class="muted" style="margin:0 2px 8px">Cualquier vecino puede presentar una iniciativa. Si junta apoyos del 0,5 % de la población de su provincia, el nodo competente debe tratarla.</p>
+  <div class="chips">${PROVINCIAS.map(p => `<a class="chip ${p.id === pid ? 'on' : ''}" href="#/iniciativas/${p.id}">${esc(p.nombre)}</a>`).join('')}</div>
+  <div class="glass tight"><div class="row">
+    <select class="in" data-act="filtro-nodo" aria-label="Filtrar por nodo"><option value="">Todos los nodos</option>${NODOS.map(N => `<option value="${N.id}" ${nodo === N.id ? 'selected' : ''}>${N.icono} ${esc(N.nombre)}</option>`).join('')}</select>
+    <select class="in" data-act="orden" aria-label="Ordenar" style="max-width:140px"><option value="apoyos">Más apoyadas</option><option value="recientes" ${orden === 'recientes' ? 'selected' : ''}>Recientes</option></select>
+  </div></div>
+  <div class="btn-row" style="margin-bottom:10px"><button class="btn green block" data-act="nueva" data-prov="${pid}" data-nodo="${nodo}">＋ Presentar una iniciativa</button></div>
+  <div class="card-list">${lista.map(tarjetaPropuesta).join('')}</div>
+  <p class="muted small" style="text-align:center">${lista.length} iniciativas en ${esc(P.nombre)}</p>${pie()}`;
+};
+
+V.nueva = () => {
+  if (!S.user) { setTimeout(() => abrirRegistro(), 0); return `${volver('#/')}<div class="glass empty-note">Para presentar una iniciativa primero tenés que registrarte (registro ficticio de la demo).</div>`; }
+  const q = new URLSearchParams(location.hash.split('?')[1] || ''), nodo = q.get('nodo') || '', P = PROV(S.user.prov);
+  return `
+  ${volver(history.length > 1 ? 'javascript:history.back()' : '#/', 'Volver')}
+  <div class="section-title"><h2>＋ Nueva iniciativa popular</h2></div>
+  <form class="glass" data-form="nueva">
+    <p class="muted small" style="margin-top:0">La presentás como vecino/a de <b>${esc(S.user.loc)}, ${esc(P.nombre)}</b>.</p>
+    <label class="f" for="ti">Título</label><input class="in" id="ti" name="titulo" maxlength="90" required placeholder="Ej.: Más frecuencias del tren a la mañana">
+    <label class="f" for="cu">¿Qué proponés y por qué?</label><textarea class="in" id="cu" name="cuerpo" maxlength="1200" required placeholder="Contá el problema y tu propuesta. Ej.: el tren llega tarde todos los días…"></textarea>
+    <div class="elysia-hint" id="hint"></div>
+    <label class="f" for="no">Nodo</label><select class="in" id="no" name="nodo" required><option value="">Elegí un nodo</option>${NODOS.map(N => `<option value="${N.id}" ${nodo === N.id ? 'selected' : ''}>${N.icono} ${esc(N.nombre)}</option>`).join('')}</select>
+    <label class="f" for="te">Tema</label><select class="in" id="te" name="tema" required>${opcionesTema(nodo)}</select>
+    <label class="f" for="lo">Localidad</label><select class="in" id="lo" name="loc">${P.localidades.map(l => `<option ${l === S.user.loc ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>
+    <div class="btn-row"><button class="btn green block">Publicar iniciativa</button></div>
+    <p class="muted small">Elysia solo sugiere a qué nodo corresponde. La decisión de dónde publicarla es tuya.</p>
+  </form>${pie()}`;
+};
+function opcionesTema(nid, sel) { const N = NODO(nid); return N ? N.temas.map(t => `<option ${t.n === sel ? 'selected' : ''}>${esc(t.n)}</option>`).join('') : '<option value="">Primero elegí un nodo</option>'; }
+
+/* Consultas */
+function opcionesConsulta(c, pid) { return c.opciones === '{localidades}' ? PROV(pid).localidades : c.opciones; }
+function resultadosBase(c, pid) {
+  if (c.base) return c.base;
+  const r = rng(c.id + pid), raw = opcionesConsulta(c, pid).map(() => 10 + r() * 40), t = raw.reduce((a, b) => a + b, 0);
+  return raw.map(v => v / t * 100);
+}
+const fillProv = (s, pid) => s.replaceAll('{prov}', PROV(pid).nombre);
+function estadoConsulta(c) {
+  return c.estado === 'deliberacion' ? '<span class="badge purple">En deliberación</span>' : c.estado === 'votacion' ? '<span class="badge green">Votación abierta</span>' : '<span class="badge gray">Cerrada</span>';
+}
+function tarjetaConsulta(c, pid) {
+  const cierre = fechaEn(c.diasCierre);
+  return `<a class="item" href="#/consulta/${c.id}/${pid}">
+    <div class="meta">${estadoConsulta(c)}<span class="badge ${c.vinculante ? 'orange' : 'outline'}">${c.vinculante ? 'Vinculante' : 'No vinculante'}</span><span class="badge outline">${c.alcance === 'nacional' ? 'Nacional' : esc(PROV(pid).nombre)}</span></div>
+    <h3>${esc(fillProv(c.pregunta, pid))}</h3>
+    <div class="muted small">Convoca: ${esc(fillProv(c.convoca, pid))} · ${c.diasCierre >= 0 ? (c.estado === 'deliberacion' ? 'deliberación hasta el ' : 'cierra el ') + fechaCorta(cierre) : 'cerró el ' + fechaCorta(cierre)}</div>
+  </a>`;
+}
+V.consultas = (pid) => {
+  pid = PROV(pid) ? pid : (S.user?.prov || S.verProv || 'lumina');
+  return `
+  <div class="photo-strip" style="--img:url(perfil.webp)"><span>Tu voz decide</span></div>
+  <div class="section-title"><h2>🗳️ Consultas populares</h2></div>
+  <div class="glass tight small">✨ <b>Elysia publica las consultas</b> y da soporte técnico, pero las preguntas las redacta el órgano que convoca. Antes de votar hay un período de deliberación con fuentes plurales.</div>
+  <h3 style="margin:16px 2px 8px">Nacionales</h3>
+  <div class="card-list">${CONSULTAS_MODELO.filter(c => c.alcance === 'nacional').map(c => tarjetaConsulta(c, pid)).join('')}</div>
+  <h3 style="margin:18px 2px 8px">Provinciales</h3>
+  <div class="chips">${PROVINCIAS.map(p => `<a class="chip ${p.id === pid ? 'on' : ''}" href="#/consultas/${p.id}">${esc(p.nombre)}</a>`).join('')}</div>
+  <div class="card-list">${CONSULTAS_MODELO.filter(c => c.alcance === 'provincial').map(c => tarjetaConsulta(c, pid)).join('')}</div>
+  ${pie()}`;
+};
+V.consulta = (cid, pid) => {
+  const c = CONSULTAS_MODELO.find(x => x.id === cid); if (!c || !PROV(pid)) return noEncontrado();
+  const ops = opcionesConsulta(c, pid), base = resultadosBase(c, pid), key = `${cid}:${c.alcance === 'nacional' ? 'nac' : pid}`, mio = S.votos[key];
+  const habilitado = S.user && (c.alcance === 'nacional' || S.user.prov === pid);
+  const padron = c.alcance === 'nacional' ? PROVINCIAS.reduce((a, p) => a + p.poblacion, 0) * 0.74 : PROV(pid).poblacion * 0.74;
+  const particip = Math.round(padron * (0.28 + rng(key)() * 0.3));
+  const res = `<h3>${c.estado === 'cerrada' ? 'Resultado final' : 'Resultados parciales simulados'}</h3>
+    ${ops.map((o, i) => `<div class="result"><div class="lbl"><span>${esc(o)} ${mio === i ? '· <span class="badge green">Tu voto</span>' : ''}</span><span>${pct(base[i])}</span></div><div class="progress ${i === base.indexOf(Math.max(...base)) ? '' : 'turq'}"><i style="width:${base[i]}%"></i></div></div>`).join('')}
+    <p class="muted small">Participación simulada: ${num(particip)} personas (${pct(particip / padron * 100)} del padrón).</p>`;
+  let accion = '';
+  if (c.estado === 'deliberacion') accion = `<div class="glass"><h3>🗣️ Período de deliberación</h3><p>La votación abre cuando termina la deliberación, el <b>${fechaCorta(fechaEn(c.diasCierre))}</b>. Mientras tanto podés leer las fuentes y opinar en el foro del Nodo de ${esc(NODO(c.nodo).nombre)}.</p>
+    <a class="btn ghost" href="#/provincia/${S.user?.prov || pid}/nodo/${c.nodo}/debates">Ir al foro del nodo</a></div>`;
+  else if (c.estado === 'votacion' && mio === undefined) accion = `<form class="glass" data-form="votar" data-key="${key}"><h3>Tu voto</h3>
+    ${ops.map((o, i) => `<label class="opt"><input type="radio" name="op" value="${i}" ${habilitado ? '' : 'disabled'}> ${esc(o)}</label>`).join('')}
+    ${habilitado ? '<button class="btn green block">Votar (simulación)</button>' : S.user ? `<p class="muted small">Esta consulta es solo para vecinos de ${esc(PROV(pid).nombre)}.</p>` : `<button type="button" class="btn green block" data-act="registro" data-prov="${pid}">Registrarme para votar</button>`}
+    <p class="muted small">Voto ficticio guardado solo en este dispositivo. No es un sistema de votación real ni seguro.</p></form>`;
+  else accion = `<div class="glass">${res}</div>`;
+  return `
+  ${volver('#/consultas/' + pid, 'Consultas')}
+  <article class="glass">
+    <div class="meta" style="display:flex;gap:6px;flex-wrap:wrap">${estadoConsulta(c)}<span class="badge ${c.vinculante ? 'orange' : 'outline'}">${c.vinculante ? 'Vinculante' : 'No vinculante'}</span><span class="badge outline">${c.alcance === 'nacional' ? 'Nacional' : esc(PROV(pid).nombre)}</span></div>
+    <h2 style="margin:10px 0;color:#06606f">${esc(fillProv(c.pregunta, pid))}</h2>
+    <p class="small"><b>Convoca y redacta:</b> ${esc(fillProv(c.convoca, pid))}<br><b>Publica:</b> Elysia (soporte técnico)<br>
+    ${c.vinculante ? '✅ <b>Vinculante:</b> el resultado obliga a los órganos, siempre que no afecte derechos fundamentales (lo controla el Tribunal Superior).' : 'ℹ️ <b>No vinculante:</b> orienta la decisión del órgano, pero no lo obliga.'}</p>
+  </article>
+  <div class="glass"><h3>📚 Fuentes plurales</h3><ul class="list-check">${c.fuentes.map(f => `<li>${esc(f)}</li>`).join('')}</ul></div>
+  ${accion}${pie()}`;
+};
+
+/* Elysia */
+V.elysia = () => `
+  <section class="glass hero photo-bg" style="padding-top:20px;--img:url(elysia.webp)">
+    <div class="orb lg" style="--c:#8a5cd6;margin:0 auto">✨</div>
+    <h1 style="font-size:26px">Elysia</h1>
+    <p class="sub">Sistema público de coordinación y procesamiento de información de la República de Niki. Su orientación surge del Perfil Programático que vota la ciudadanía.</p>
+    <span class="badge purple">Perfil vigente: ${esc(MANDATO.programa)}</span>
+  </section>
+  ${DEMO}
+  <div class="glass">
+    <img class="deco-sphere" src="esfera.webp" alt="">
+    <h3>⏱️ Tiempo de mandato cumplido</h3>
+    <p class="muted small" style="margin:0">Cuenta progresiva desde el ${fechaLarga(MANDATO.inicio)}</p>
+    ${contadorHTML('lleva')}
+    <h3 style="margin-top:14px">⏳ Tiempo que le queda</h3>
+    <p class="muted small" style="margin:0">Hasta la próxima elección del Perfil Programático, el ${fechaLarga(MANDATO.fin)}</p>
+    ${contadorHTML('resta')}
+    <div class="progress orange" style="margin-top:12px"><i data-avance style="width:${avanceMandato()}%"></i></div>
+    <p class="small" style="text-align:center;margin-top:6px">Mandato cumplido: <b data-avance-txt>${avanceMandato().toFixed(4).replace('.', ',')} %</b> de 4 años</p>
+  </div>
+  <div class="glass"><h3>🛠️ Cómo se crea Elysia</h3>
+    <ol class="steps">
+      <li><b>La ciudadanía aprueba el Módulo Tecnológico</b> de Evanescence, que fija qué puede y qué no puede hacer.</li>
+      <li><b>La construye un consorcio público</b> de universidades públicas y un instituto técnico estatal, con código abierto. Ninguna empresa puede desarrollar su núcleo.</li>
+      <li><b>Funciona un período de prueba</b> sin efectos reales.</li>
+      <li><b>Se activa</b> con dos tercios del Plenario de Nodos, el acuerdo del Consejo Federal y un referendo.</li>
+      <li><b>Cada 4 años se elige su personalidad</b> con el voto del Perfil Programático.</li>
+    </ol></div>
+  <div class="glass"><h3>🗳️ Cómo se elige su personalidad</h3>
+    <p>Partidos y agrupaciones presentan programas de gobierno. Elysia publica un análisis comparativo neutral, auditado por Prisma, y la ciudadanía vota en secreto. Si ningún programa logra un apoyo amplio, hay segunda vuelta. El programa ganador fija sus prioridades durante 4 años; sus valores están fijados en Evanescence.</p>
+    <a class="btn" href="#/perfil">Simular la elección del Perfil Programático</a></div>
+  <div class="glass"><h3>✅ Qué hace</h3><ul class="list-check">
+    <li>Detecta problemas y vacíos normativos (el nodo tiene 90 días para tratarlos).</li><li>Elabora informes de impacto no vinculantes.</li>
+    <li>Coordina a los nodos y da soporte técnico a las consultas.</li><li>Publica sus fuentes y criterios.</li></ul>
+    <h3 style="margin-top:12px">⛔ Qué no puede hacer</h3><ul class="list-check no">
+    <li>Decidir sin la firma de una persona responsable.</li><li>Usar la fuerza, manejar fondos o armas.</li><li>Hacer propaganda o enviar mensajes políticos personalizados.</li>
+    <li>Moderar los debates entre ciudadanos.</li><li>Modificar su propio código: hacen falta 3 de 4 custodios (Prisma, Tribunal Superior, Consejo Federal y un comité de universidades).</li></ul></div>
+  ${pie()}`;
+
+/* Perfil Programático */
+V.perfil = () => {
+  const pf = S.perfil, r1 = [27.4, 22.1, 33.6, 16.9];
+  const top = PROGRAMAS.map((p, i) => ({ p, v: r1[i] })).sort((a, b) => b.v - a.v), finalistas = [top[0].p, top[1].p];
+  const filaCmp = N => `<tr><td>${N.icono} ${esc(CORTO[N.id])}</td><td><div class="bars">${PROGRAMAS.map(p => `<i style="width:${p.prioridades[N.id]}%;background:${p.color}" title="${esc(p.nombre)}: ${p.prioridades[N.id]}"></i>`).join('')}</div></td></tr>`;
+  let paso = '';
+  if (!pf.r1) paso = `<form class="glass" data-form="perfil1"><h3>3. Tu voto · primera vuelta</h3>
+      ${PROGRAMAS.map(p => `<label class="opt"><input type="radio" name="op" value="${p.id}"> <span><span style="color:${p.color}">●</span> ${esc(p.nombre)} <span class="muted small">· ${esc(p.agrupacion)}</span></span></label>`).join('')}
+      <button class="btn green block">Votar (simulación)</button></form>`;
+  else {
+    paso = `<div class="glass"><h3>Resultado simulado · primera vuelta</h3>
+      ${PROGRAMAS.map((p, i) => `<div class="result"><div class="lbl"><span>${esc(p.nombre)} ${pf.r1 === p.id ? '<span class="badge green">Tu voto</span>' : ''}</span><span>${String(r1[i]).replace('.', ',')} %</span></div><div class="progress"><i style="width:${r1[i]}%;background:${p.color}"></i></div></div>`).join('')}
+      <p class="small">Ningún programa superó el 50 %: hay <b>segunda vuelta</b> entre <b>${esc(finalistas[0].nombre)}</b> y <b>${esc(finalistas[1].nombre)}</b>.</p></div>`;
+    if (!pf.r2) paso += `<form class="glass" data-form="perfil2"><h3>4. Segunda vuelta</h3>
+      ${finalistas.map(p => `<label class="opt"><input type="radio" name="op" value="${p.id}"> <span style="color:${p.color}">●</span> ${esc(p.nombre)}</label>`).join('')}
+      <button class="btn green block">Votar en la segunda vuelta</button></form>`;
+    else {
+      const r2 = { [finalistas[0].id]: 54.3, [finalistas[1].id]: 45.7 };
+      paso += `<div class="glass"><h3>🏆 Resultado simulado · segunda vuelta</h3>
+        ${finalistas.map(p => `<div class="result"><div class="lbl"><span>${esc(p.nombre)} ${pf.r2 === p.id ? '<span class="badge green">Tu voto</span>' : ''}</span><span>${String(r2[p.id]).replace('.', ',')} %</span></div><div class="progress"><i style="width:${r2[p.id]}%;background:${p.color}"></i></div></div>`).join('')}
+        <p><b>${esc(finalistas[0].nombre)}</b> fija las prioridades de Elysia por los próximos 4 años. Prisma audita el escrutinio y publica su informe.</p>
+        <button class="btn ghost" data-act="reset-perfil">Repetir la simulación</button></div>`;
+    }
+  }
+  return `
+  ${volver('#/elysia', 'Elysia')}
+  <div class="photo-strip" style="--img:url(perfil.webp)"><span>Cada 4 años elegimos el rumbo de Elysia</span></div>
+  <div class="section-title"><h2>🗳️ Elección del Perfil Programático</h2></div>
+  ${DEMO}
+  <p class="muted" style="margin:0 2px">Cada 4 años la ciudadanía elige el programa que define las prioridades de Elysia. Próxima elección: <b>${fechaCorta(MANDATO.fin)} ${MANDATO.fin.getFullYear()}</b>.</p>
+  <h3 style="margin:16px 2px 8px">1. Los programas</h3>
+  <div class="card-list">${PROGRAMAS.map(p => { const tops = Object.entries(p.prioridades).sort((a, b) => b[1] - a[1]).slice(0, 3);
+    return `<div class="item" style="border-left:5px solid ${p.color}"><h3>${esc(p.nombre)}</h3><div class="muted small">${esc(p.agrupacion)}</div><p>«${esc(p.lema)}»</p>
+    <div class="meta">${tops.map(([n]) => `<span class="badge" style="background:${NODO(n).color}">${NODO(n).icono} ${esc(CORTO[n])}</span>`).join('')}</div></div>`; }).join('')}</div>
+  <div class="glass"><h3>2. Análisis comparativo de Elysia</h3>
+    <p class="muted small" style="margin-top:0">Peso que cada programa le da a cada nodo (0 a 100). <span class="badge purple">Auditado por Prisma</span></p>
+    <table class="cmp"><tbody>${NODOS.map(filaCmp).join('')}</tbody></table>
+    <div class="legend">${PROGRAMAS.map(p => `<span><i style="background:${p.color}"></i>${esc(p.nombre)}</span>`).join('')}</div></div>
+  ${paso}${pie()}`;
+};
+
+/* Tendencias */
+V.tendencias = (pid) => {
+  const nac = !PROV(pid);
+  const datos = NODOS.map(N => {
+    const provs = nac ? PROVINCIAS.map(p => p.id) : [pid];
+    const t = provs.map(x => datosProv(x).tend[N.id]);
+    return { N, crit: t.reduce((a, x) => a + x.criticas, 0), ideas: t.reduce((a, x) => a + x.ideas, 0), mej: t.reduce((a, x) => a + x.mejoras, 0),
+      serie: Array.from({ length: 12 }, (_, i) => t.reduce((a, x) => a + x.serie[i], 0)) };
+  });
+  const total = Array.from({ length: 12 }, (_, i) => datos.reduce((a, d) => a + d.serie[i], 0));
+  return `
+  <div class="section-title"><h2>📈 Tendencias ciudadanas</h2></div>
+  <div class="chips"><a class="chip ${nac ? 'on' : ''}" href="#/tendencias">Todo el país</a>${PROVINCIAS.map(p => `<a class="chip ${p.id === pid ? 'on' : ''}" href="#/tendencias/${p.id}">${esc(p.nombre)}</a>`).join('')}</div>
+  <div class="glass"><h3>Participación por nodo</h3><p class="muted small" style="margin-top:0">Críticas, ideas y mejoras publicadas en el último año${nac ? '' : ' en ' + esc(PROV(pid).nombre)}.</p>
+    ${barrasH(datos.map(d => ({ l: CORTO[d.N.id], v: d.crit + d.ideas + d.mej, c: d.N.color })).sort((a, b) => b.v - a.v))}</div>
+  <div class="glass"><h3>¿Qué tipo de participación hay en cada nodo?</h3>${barrasApiladas(datos.map(d => ({ l: CORTO[d.N.id], p: [d.crit, d.ideas, d.mej] })))}</div>
+  <div class="glass"><h3>Actividad total · últimos 12 meses</h3>${linea(total, '#14b8c4')}</div>
+  <p class="muted small" style="text-align:center">Datos simulados con fines educativos. Elysia publica estas tendencias, pero no las usa para enviar mensajes personalizados.</p>${pie()}`;
+};
+
+V.prisma = () => {
+  const r = rng('bitacora');
+  const acciones = ['Auditó el informe de impacto sobre la Ley de Transporte Nocturno', 'Revisó las detecciones de Elysia en Piastri', 'Publicó el análisis de sesgos de clasificación', 'Verificó la firma de 3 custodios en una actualización de Elysia', 'Auditó el escrutinio de la consulta sobre bibliotecas', 'Recibió 12 temas propuestos por el panel ciudadano'];
+  return `
+  <section class="glass hero photo-bg" style="padding-top:20px;--img:url(prisma.webp)"><div class="orb lg" style="--c:#6a3fb8;margin:0 auto">🔷</div><h1 style="font-size:26px">Prisma</h1>
+    <p class="sub">Órgano independiente de auditoría. Regula y audita Ágora, las cuentas públicas, el cumplimiento de las leyes por parte de los nodos y el funcionamiento de Elysia.</p></section>
+  <div class="glass"><h3>👥 Composición</h3><ul class="list-check">
+    <li>9 auditores con mandato único de 6 años: 3 por concurso técnico, 3 propuestos por la oposición y 3 por el Consejo Federal.</li>
+    <li>La presidencia corresponde a la oposición, para que el controlado no elija a su controlador.</li>
+    <li>Un panel de 30 ciudadanos sorteados propone temas para auditar.</li></ul></div>
+  <div class="glass"><h3>📜 Reglas de Ágora</h3><ul class="list-check">
+    <li>Elysia no modera los debates ni envía mensajes políticos personalizados.</li>
+    <li>Toda decisión apoyada en Elysia se puede revisar ante una persona.</li>
+    <li>Cada municipio tiene puntos de atención presencial para quien no usa internet.</li>
+    <li>Se prohíbe el perfilamiento político individual de los usuarios.</li>
+    <li>Los reportes de contenido los revisan moderadores humanos, bajo control de Prisma.</li></ul></div>
+  <div class="glass"><h3>📒 Bitácora pública</h3>${acciones.map((a, i) => `<div class="ev"><div class="d">${fechaEn(-(i * 3 + Math.floor(r() * 3))).getDate()}<small>${fechaEn(-(i * 3)).toLocaleDateString('es-AR', { month: 'short' }).replace('.', '')}</small></div><div>${esc(a)}</div></div>`).join('')}</div>
+  ${pie()}`;
+};
+
+V.acerca = () => `
+  <div class="photo-strip" style="--img:url(acerca.webp)"><span>Hecho con nostalgia de los 2000</span></div>
+  <div class="section-title"><h2>ℹ️ Sobre esta demo</h2></div>
+  <div class="glass">
+    <p><b>Ágora</b> es una demostración educativa creada para un trabajo práctico sobre formas de gobierno. Muestra cómo podría funcionar la participación ciudadana en la <b>Lumencracia</b>, una forma de gobierno democrática ficticia.</p>
+    <ul class="list-check no"><li>No es un sistema electoral oficial ni seguro.</li><li>No verifica identidades: el registro es ficticio.</li><li>Niki, sus provincias, personas, propuestas y resultados son inventados.</li></ul>
+    <p class="small">Lo que hacés (apoyos, votos, comentarios) se guarda solo en este navegador.</p>
+    <div class="btn-row"><button class="btn orange" data-act="borrar">Borrar mis datos de la demo</button></div>
+  </div>
+  <div class="glass" id="instalar"><h3>📲 Instalar Ágora en el celular</h3>
+    <p class="small"><b>Android (Chrome):</b> menú ⋮ › «Instalar app» o «Agregar a la pantalla principal».<br><b>iPhone (Safari):</b> botón Compartir › «Agregar a inicio».</p>
+    <button class="btn green" data-act="instalar" ${instalarEvt ? '' : 'hidden'}>Instalar ahora</button></div>
+  ${pie()}`;
+
+function pie() {
+  return `<footer class="foot"><div class="prisma">🔷 Plataforma regulada y auditada por Prisma</div>
+    <div>Ágora · República de Niki · Demo educativa con datos ficticios</div>
+    <div><a class="link" href="#/acerca">Sobre esta demo</a> · <a class="link" href="#/prisma">Reglas y bitácora</a></div></footer>`;
+}
+function noEncontrado() { return `${volver('#/')}<div class="glass empty-note">No encontramos esa página.</div>`; }
+
+/* ---------- menú lateral ---------- */
+function renderDrawer(ruta) {
+  const it = (href, ico, txt, key) => `<a href="${href}" class="${ruta === key ? 'on' : ''}"><span class="ico">${ico}</span>${txt}</a>`;
+  $('#drawer').innerHTML = `
+    <div class="dhead"><img src="logo.webp" width="40" height="40" alt=""><b>Ágora</b><button class="icon-btn" data-act="cerrar-menu" aria-label="Cerrar menú">✕</button></div>
+    <a class="glass tight item" href="#/elysia" style="display:block;margin:0 0 12px">
+      <div class="small"><b>✨ Elysia</b> · mandato ${MANDATO.inicio.getFullYear()}–${MANDATO.fin.getFullYear()}</div>
+      <div class="small muted">Quedan <span data-resta-txt>${textoResta()}</span></div>
+      <div class="progress orange" style="margin-top:6px;height:10px"><i data-avance style="width:${avanceMandato()}%"></i></div></a>
+    <nav>
+      ${it('#/', '🏠', 'Inicio', 'inicio')}
+      ${it('#/boletin', '📰', 'Boletín Oficial y calendario', 'boletin')}
+      <button class="dl" data-act="sub"><span class="ico">🗺️</span>Provincias <span style="margin-left:auto">▾</span></button>
+      <div class="sub ${ruta === 'provincia' ? 'open' : ''}">${PROVINCIAS.map(p => `<a href="#/provincia/${p.id}">${esc(p.nombre)}</a>`).join('')}</div>
+      ${it('#/elysia', '✨', 'Elysia: mandato y creación', 'elysia')}
+      ${it('#/perfil', '🗳️', 'Perfil Programático', 'perfil')}
+      ${it('#/consultas', '📋', 'Consultas populares', 'consultas')}
+      ${it('#/iniciativas', '💡', 'Iniciativas populares', 'iniciativas')}
+      ${it('#/tendencias', '📈', 'Tendencias', 'tendencias')}
+      ${it('#/prisma', '🔷', 'Prisma y reglas', 'prisma')}
+      ${it('#/acerca', 'ℹ️', 'Sobre esta demo', 'acerca')}
+      ${S.user ? `<button class="dl" data-act="salir"><span class="ico">🚪</span>Salir (${esc(S.user.alias)})</button>` : `<button class="dl" data-act="registro"><span class="ico">👤</span>Participar</button>`}
+    </nav>`;
+}
+function menu(abrir) { $('#drawer').classList.toggle('open', abrir); $('#scrim').classList.toggle('open', abrir); }
+
+/* ---------- modales ---------- */
+function modal(html) { $('#modalBody').innerHTML = html; $('#modal').classList.add('open'); }
+function cerrarModal() { $('#modal').classList.remove('open'); }
+function abrirRegistro(prov) {
+  const pid = prov || S.verProv || 'lumina';
+  modal(`<h2>Participar en Ágora</h2><p class="muted small">Registro ficticio de la demo: no se verifica la identidad y los datos quedan solo en este dispositivo.</p>
+    <form data-form="registro">
+      <label class="f" for="al">Nombre o alias</label><input class="in" id="al" name="alias" maxlength="30" required placeholder="Ej.: Sofi">
+      <label class="f" for="pr">Provincia donde vivís</label><select class="in" id="pr" name="prov">${PROVINCIAS.map(p => `<option value="${p.id}" ${p.id === pid ? 'selected' : ''}>${esc(p.nombre)}</option>`).join('')}</select>
+      <label class="f" for="lc">Localidad</label><select class="in" id="lc" name="loc">${PROV(pid).localidades.map(l => `<option>${esc(l)}</option>`).join('')}</select>
+      <div class="btn-row"><button class="btn green" style="flex:1">Entrar</button><button type="button" class="btn ghost" data-act="cerrar-modal">Cancelar</button></div>
+    </form>`);
+}
+function abrirNuevoDebate(pid, nid) {
+  if (!S.user) return abrirRegistro(pid);
+  if (S.user.prov !== pid) return toast('Solo podés debatir en tu provincia');
+  const N = NODO(nid);
+  modal(`<h2>Abrir un debate</h2><p class="muted small">Nodo de ${esc(N.nombre)} · ${esc(PROV(pid).nombre)}</p>
+    <form data-form="debate" data-prov="${pid}" data-nodo="${nid}">
+      <label class="f" for="tp">Tipo</label><select class="in" id="tp" name="tipo"><option>Crítica</option><option>Idea</option><option>Mejora</option><option>Pregunta</option></select>
+      <label class="f" for="tm">Tema</label><select class="in" id="tm" name="tema">${opcionesTema(nid)}</select>
+      <label class="f" for="dt">Título</label><input class="in" id="dt" name="titulo" maxlength="90" required>
+      <label class="f" for="dx">Contá más</label><textarea class="in" id="dx" name="texto" maxlength="1200" required></textarea>
+      <div class="btn-row"><button class="btn" style="flex:1">Publicar</button><button type="button" class="btn ghost" data-act="cerrar-modal">Cancelar</button></div>
+    </form>`);
+}
+let tt;
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 2400); }
+
+/* ---------- router ---------- */
+let timers = [];
+function render() {
+  timers.forEach(clearInterval); timers = [];
+  const [ruta] = (location.hash.slice(1) || '/').split('?');
+  const seg = ruta.split('/').filter(Boolean);
+  let html, key = seg[0] || 'inicio';
+  if (!seg.length) html = V.inicio();
+  else if (seg[0] === 'provincia' && seg[2] === 'nodo') { html = V.nodo(seg[1], seg[3], seg[4] || 'info'); key = 'provincia'; if ((seg[4] || 'info') === 'vivo') setTimeout(() => iniciarChat(seg[1], seg[3]), 0); }
+  else if (seg[0] === 'provincia') html = V.provincia(seg[1]);
+  else if (seg[0] === 'consulta') html = V.consulta(seg[1], seg[2]);
+  else if (V[seg[0]]) html = V[seg[0]](seg[1]);
+  else html = noEncontrado();
+  $('#view').innerHTML = html;
+  $('#userChip').textContent = S.user ? `👤 ${S.user.alias}` : 'Participar';
+  renderDrawer(key); menu(false); tickContadores();
+  if (!location.hash.includes('#provincias')) window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', () => { calSel = null; render(); });
+
+/* chat simulado de la sesión en vivo */
+const CHAT = ['¿Cuándo se trata la iniciativa de las guardias?', 'Muy buena la explicación del ministro 👏', 'En mi localidad esto no se cumple', 'Gracias por transmitir, así podemos seguirlo desde casa', '¿Van a publicar el informe completo?', 'Apoyo la propuesta, ojalá la aprueben', 'Pido que la próxima sesión sea en el interior de la provincia', 'Prisma debería auditar esto', '¿Se puede presentar una iniciativa en conjunto?', 'Desde el punto de atención presencial también lo estamos mirando 🙌'];
+function iniciarChat(pid, nid) {
+  const box = $('#chat'); if (!box) return; const r = rng(Date.now());
+  const add = (autor, texto, mio) => { box.insertAdjacentHTML('beforeend', `<div class="msg ${mio ? 'mine' : ''}"><b>${esc(autor)}:</b> ${esc(texto)}</div>`); box.scrollTop = box.scrollHeight; if (box.children.length > 60) box.firstChild.remove(); };
+  for (let i = 0; i < 4; i++) add(persona(r), pick(r, CHAT));
+  let ult = ''; timers.push(setInterval(() => { let m; do { m = pick(r, CHAT); } while (m === ult); ult = m; add(persona(r), m); const v = $('#viewers'); if (v) v.textContent = num(Number(v.textContent.replace(/\D/g, '')) + Math.floor(r() * 7) - 2); }, 3200));
+  box._add = add;
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const a = b.dataset.act;
+  if (a === 'toggle') b.classList.toggle('open');
+  else if (a === 'mapa') { mapaSel = b.dataset.prov; document.querySelectorAll('.prov-shape').forEach(g => g.classList.toggle('on', g.dataset.prov === mapaSel)); $('#mapaInfo').innerHTML = infoMapa(); }
+  else if (a === 'cal') { calSel = Number(b.dataset.dia); $('#cal').innerHTML = calendarioHTML(); }
+  else if (a === 'loc') { S.locFiltro = b.dataset.loc || null; guardar(); render(); }
+  else if (a === 'registro') abrirRegistro(b.dataset.prov);
+  else if (a === 'cerrar-modal') cerrarModal();
+  else if (a === 'cerrar-menu') menu(false);
+  else if (a === 'sub') b.nextElementSibling.classList.toggle('open');
+  else if (a === 'salir') { S.user = null; guardar(); toast('Saliste de Ágora'); render(); }
+  else if (a === 'nueva') {
+    if (!S.user) return abrirRegistro(b.dataset.prov);
+    if (b.dataset.prov && S.user.prov !== b.dataset.prov) return toast(`Solo podés proponer en ${PROV(S.user.prov).nombre}`);
+    location.hash = '#/nueva' + (b.dataset.nodo ? '?nodo=' + b.dataset.nodo : '');
+  }
+  else if (a === 'nuevo-debate') abrirNuevoDebate(b.dataset.prov, b.dataset.nodo);
+  else if (a === 'apoyar') { const id = b.dataset.id; if (S.apoyos[id]) delete S.apoyos[id]; else S.apoyos[id] = true; guardar(); toast(S.apoyos[id] ? '¡Gracias por tu apoyo!' : 'Quitaste tu apoyo'); render(); }
+  else if (a === 'compartir') { const url = location.href; if (navigator.share) navigator.share({ title: 'Ágora', url }).catch(() => {}); else { navigator.clipboard?.writeText(url); toast('Link copiado'); } }
+  else if (a === 'usar-sugerencia') { const f = b.closest('form'); f.nodo.value = b.dataset.nodo; f.tema.innerHTML = opcionesTema(b.dataset.nodo, b.dataset.tema); toast('Sugerencia aplicada'); }
+  else if (a === 'reset-perfil') { S.perfil = {}; guardar(); render(); }
+  else if (a === 'borrar') { if (confirm('¿Borrar todos tus datos de la demo en este dispositivo?')) { S = vacio(); guardar(); toast('Datos borrados'); location.hash = '#/'; render(); } }
+  else if (a === 'instalar' && instalarEvt) { instalarEvt.prompt(); instalarEvt = null; }
+});
+$('#menuBtn').addEventListener('click', () => menu(true));
+$('#scrim').addEventListener('click', () => menu(false));
+$('#userChip').addEventListener('click', () => S.user ? (location.hash = '#/provincia/' + S.user.prov) : abrirRegistro());
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') cerrarModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { cerrarModal(); menu(false); } if ((e.key === 'Enter' || e.key === ' ') && e.target.classList?.contains('prov-shape')) { e.preventDefault(); e.target.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.act === 'filtro-nodo' || t.dataset.act === 'orden') {
+    const pid = location.hash.split('?')[0].split('/')[2] || S.user?.prov || 'lumina';
+    const q = new URLSearchParams(location.hash.split('?')[1] || ''); q.set(t.dataset.act === 'orden' ? 'orden' : 'nodo', t.value);
+    location.hash = `#/iniciativas/${pid}?${q}`;
+  }
+  if (t.name === 'prov' && t.form?.dataset.form === 'registro') t.form.loc.innerHTML = PROV(t.value).localidades.map(l => `<option>${esc(l)}</option>`).join('');
+  if (t.name === 'nodo' && t.form?.dataset.form === 'nueva') t.form.tema.innerHTML = opcionesTema(t.value);
+  if (t.type === 'radio') t.closest('form').querySelectorAll('.opt').forEach(o => o.classList.toggle('on', o.contains(t) && t.checked));
+});
+document.addEventListener('input', e => {
+  const f = e.target.form; if (!f || f.dataset.form !== 'nueva' || !['titulo', 'cuerpo'].includes(e.target.name)) return;
+  const s = clasificar(f.titulo.value + ' ' + f.cuerpo.value), h = $('#hint');
+  if (!s) { h.classList.remove('show'); return; }
+  const N = NODO(s.nodo); h.classList.add('show');
+  h.innerHTML = `✨ <b>Elysia sugiere:</b> Nodo de ${esc(N.nombre)} › ${esc(s.tema)}
+    ${f.nodo.value === s.nodo && f.tema.value === s.tema ? '<span class="badge green">Aplicada</span>' : `<button type="button" class="btn small" style="margin-left:6px" data-act="usar-sugerencia" data-nodo="${s.nodo}" data-tema="${esc(s.tema)}">Usar sugerencia</button>`}`;
+});
+
+document.addEventListener('submit', e => {
+  const f = e.target, tipo = f.dataset.form; if (!tipo) return; e.preventDefault();
+  const v = n => (f[n]?.value || '').trim();
+  if (tipo === 'registro') {
+    if (v('alias').length < 2) return toast('Escribí un nombre o alias');
+    S.user = { alias: v('alias'), prov: v('prov'), loc: v('loc') }; guardar(); cerrarModal();
+    toast(`¡Hola, ${S.user.alias}! Participás desde ${S.user.loc}`); render();
+  } else if (tipo === 'nueva') {
+    if (v('titulo').length < 8) return toast('El título es muy corto');
+    if (v('cuerpo').length < 20) return toast('Contá un poco más tu propuesta');
+    if (!v('nodo')) return toast('Elegí el nodo');
+    const D = datosProv(S.user.prov), id = 'u-' + S.user.prov + '-' + Date.now().toString(36);
+    S.propias.push({ id, prov: S.user.prov, nodo: v('nodo'), tema: v('tema'), loc: v('loc'), titulo: v('titulo'), cuerpo: v('cuerpo'), autor: S.user.alias, apoyos: 0, umbral: D.umbral, estado: 'apoyos', dias: 0 });
+    S.apoyos[id] = true; guardar(); toast('¡Iniciativa publicada!'); location.hash = '#/propuesta/' + id;
+  } else if (tipo === 'com') {
+    if (!v('t')) return; (S.coms[f.dataset.id] ||= []).push({ autor: S.user.alias, texto: v('t'), dias: 0 }); guardar(); render();
+  } else if (tipo === 'chat') {
+    if (!v('t')) return; $('#chat')?._add(S.user.alias, v('t'), true); f.t.value = '';
+  } else if (tipo === 'debate') {
+    if (v('titulo').length < 5 || v('texto').length < 10) return toast('Completá el título y el texto');
+    const id = 'ud-' + f.dataset.prov + '-' + Date.now().toString(36);
+    S.debates.push({ id, prov: f.dataset.prov, nodo: f.dataset.nodo, tipo: v('tipo'), tema: v('tema'), loc: S.user.loc, titulo: v('titulo'), texto: v('texto'), autor: S.user.alias, coms: [], vistas: 1, dias: 0 });
+    guardar(); cerrarModal(); toast('Debate publicado'); location.hash = '#/debate/' + id;
+  } else if (tipo === 'votar') {
+    const op = f.querySelector('input[name=op]:checked'); if (!op) return toast('Elegí una opción');
+    S.votos[f.dataset.key] = Number(op.value); guardar(); toast('Voto registrado (simulación)'); render();
+  } else if (tipo === 'perfil1' || tipo === 'perfil2') {
+    const op = f.querySelector('input[name=op]:checked'); if (!op) return toast('Elegí un programa');
+    S.perfil[tipo === 'perfil1' ? 'r1' : 'r2'] = op.value; guardar(); render();
+  }
+});
+
+/* ---------- burbujas, PWA e inicio ---------- */
+(function burbujas() {
+  const c = $('.bubbles'); const r = rng('burbujas');
+  const nueva = (delay = true) => { const s = 14 + Math.random() * 50; c.insertAdjacentHTML('beforeend', `<span style="left:${Math.random() * 100}%;width:${s}px;height:${s}px;animation-duration:${14 + Math.random() * 18}s;animation-delay:${delay ? '-' + (Math.random() * 30).toFixed(1) : '0'}s"></span>`); };
+  for (let i = 0; i < 14; i++) nueva();
+  c.addEventListener('pointerdown', e => {
+    const b = e.target.closest('span'); if (!b || b.classList.contains('pop')) return;
+    const m = new DOMMatrix(getComputedStyle(b).transform);
+    b.style.translate = `${m.m41}px ${m.m42}px`; b.classList.add('pop');
+    setTimeout(() => { b.remove(); nueva(false); }, 360);
+  });
+})();
+let instalarEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); instalarEvt = e; const b = document.querySelector('[data-act=instalar]'); if (b) b.hidden = false; });
+if ('serviceWorker' in navigator && location.protocol !== 'file:') window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+render();
