@@ -244,7 +244,7 @@ V.inicio = () => {
   const d = hoy(), feat = BOLETIN.find(b => b.destacado);
   return `
   <section class="glass hero photo-bg" style="--img:url(inicio.webp)">
-    <img class="logo" src="logo.svg" alt="Logo de Ágora">
+    <img class="logo" src="logo.webp" alt="Logo de Ágora">
     <h1>Bienvenidos a Ágora</h1>
     <p class="sub">La plataforma de participación ciudadana de la <b>República de Niki</b>, en la Lumencracia. Informate, proponé y debatí con tu provincia.</p>
     <div class="btn-row" style="justify-content:center">
@@ -710,7 +710,7 @@ function noEncontrado() { return `${volver('#/')}<div class="glass empty-note">N
 function renderDrawer(ruta) {
   const it = (href, ico, txt, key) => `<a href="${href}" class="${ruta === key ? 'on' : ''}"><span class="ico">${ico}</span>${txt}</a>`;
   $('#drawer').innerHTML = `
-    <div class="dhead"><img src="logo.svg" width="40" height="40" alt=""><b>Ágora</b><button class="icon-btn" data-act="cerrar-menu" aria-label="Cerrar menú">✕</button></div>
+    <div class="dhead"><img src="logo.webp" width="40" height="40" alt=""><b>Ágora</b><button class="icon-btn" data-act="cerrar-menu" aria-label="Cerrar menú">✕</button></div>
     <a class="glass tight item" href="#/elysia" style="display:block;margin:0 0 12px">
       <div class="small"><b>✨ Elysia</b> · mandato ${MANDATO.inicio.getFullYear()}–${MANDATO.fin.getFullYear()}</div>
       <div class="small muted">Quedan <span data-resta-txt>${textoResta()}</span></div>

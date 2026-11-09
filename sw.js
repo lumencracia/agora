@@ -1,7 +1,7 @@
 /* Service worker de Ágora: guarda la app para usarla sin conexión */
-const CACHE = 'agora-v8';
+const CACHE = 'agora-v9';
 const ARCHIVOS = ['./', './index.html', './styles.css', './data.js', './app.js', './manifest.webmanifest',
-  './logo.svg', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png',
+  './logo.webp', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png',
   './inicio.webp', './elysia.webp', './provincias.webp', './esfera.webp', './fondo.webp'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARCHIVOS))); self.skipWaiting(); });
 self.addEventListener('activate', e => {
