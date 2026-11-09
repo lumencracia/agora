@@ -36,7 +36,7 @@ body::before {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
     linear-gradient(180deg, rgba(255,255,255,.10) 0%, rgba(240,252,255,.30) 35%, rgba(240,252,255,.50) 70%, rgba(240,253,245,.62) 100%),
-    url(img/fondo.webp) center top / cover no-repeat,
+    url(fondo.webp) center top / cover no-repeat,
     linear-gradient(180deg, #3fb8ec 0%, #A8E7F7 60%, #8BD66A 100%);
 }
 

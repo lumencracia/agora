@@ -243,8 +243,8 @@ const V = {};
 V.inicio = () => {
   const d = hoy(), feat = BOLETIN.find(b => b.destacado);
   return `
-  <section class="glass hero photo-bg" style="--img:url(img/inicio.webp)">
-    <img class="logo" src="icons/logo.svg" alt="Logo de Ágora">
+  <section class="glass hero photo-bg" style="--img:url(inicio.webp)">
+    <img class="logo" src="logo.svg" alt="Logo de Ágora">
     <h1>Bienvenidos a Ágora</h1>
     <p class="sub">La plataforma de participación ciudadana de la <b>República de Niki</b>, en la Lumencracia. Informate, proponé y debatí con tu provincia.</p>
     <div class="btn-row" style="justify-content:center">
@@ -274,7 +274,7 @@ V.inicio = () => {
   <div class="card-list">${CONSULTAS_MODELO.filter(c => c.alcance === 'nacional').map(c => tarjetaConsulta(c, 'lumina')).join('')}</div>
 
   <div class="section-title" id="provincias"><h2>🗺️ Las 13 provincias de Niki</h2></div>
-  <div class="photo-strip" style="--img:url(img/provincias.webp)"><span>Un país federal, conectado y sustentable</span></div>
+  <div class="photo-strip" style="--img:url(provincias.webp)"><span>Un país federal, conectado y sustentable</span></div>
   <p class="muted" style="margin:0 2px 10px">Tocá tu provincia en el mapa para ver sus localidades, sus nodos, las propuestas y los debates.</p>
   ${mapaNiki()}
   ${pie()}`;
@@ -314,7 +314,7 @@ function calendarioHTML() {
 
 V.boletin = () => `
   ${volver('#/', 'Inicio')}
-  <div class="photo-strip" style="--img:url(img/boletin.webp)"><span>Boletín Oficial</span></div>
+  <div class="photo-strip" style="--img:url(boletin.webp)"><span>Boletín Oficial</span></div>
   <div class="section-title"><h2>📰 Boletín Oficial de Niki</h2></div>
   <p class="muted" style="margin:0 2px 10px">Comunicaciones de los órganos del Estado que la ciudadanía necesita conocer. Tocá cada aviso para leerlo completo.</p>
   <div class="card-list">${BOLETIN.map(b => noticiaHTML(b, b.destacado)).join('')}</div>
@@ -324,7 +324,7 @@ V.boletin = () => `
 
 V.provincias = () => `
   ${volver('#/', 'Inicio')}
-  <div class="photo-strip" style="--img:url(img/provincias.webp)"><span>República de Niki</span></div>
+  <div class="photo-strip" style="--img:url(provincias.webp)"><span>República de Niki</span></div>
   <div class="section-title"><h2>🗺️ Elegí tu provincia</h2></div>
   <p class="muted" style="margin:0 2px 10px">Niki es un Estado federal con 13 provincias. Cada una organiza sus propios nodos y tiene su propia instancia de Elysia.</p>
   ${mapaNiki()}${pie()}`;
@@ -526,7 +526,7 @@ function tarjetaConsulta(c, pid) {
 V.consultas = (pid) => {
   pid = PROV(pid) ? pid : (S.user?.prov || S.verProv || 'lumina');
   return `
-  <div class="photo-strip" style="--img:url(img/perfil.webp)"><span>Tu voz decide</span></div>
+  <div class="photo-strip" style="--img:url(perfil.webp)"><span>Tu voz decide</span></div>
   <div class="section-title"><h2>🗳️ Consultas populares</h2></div>
   <div class="glass tight small">✨ <b>Elysia publica las consultas</b> y da soporte técnico, pero las preguntas las redacta el órgano que convoca. Antes de votar hay un período de deliberación con fuentes plurales.</div>
   <h3 style="margin:16px 2px 8px">Nacionales</h3>
@@ -567,7 +567,7 @@ V.consulta = (cid, pid) => {
 
 /* Elysia */
 V.elysia = () => `
-  <section class="glass hero photo-bg" style="padding-top:20px;--img:url(img/elysia.webp)">
+  <section class="glass hero photo-bg" style="padding-top:20px;--img:url(elysia.webp)">
     <div class="orb lg" style="--c:#8a5cd6;margin:0 auto">✨</div>
     <h1 style="font-size:26px">Elysia</h1>
     <p class="sub">Sistema público de coordinación y procesamiento de información de la República de Niki. Su orientación surge del Perfil Programático que vota la ciudadanía.</p>
@@ -575,7 +575,7 @@ V.elysia = () => `
   </section>
   ${DEMO}
   <div class="glass">
-    <img class="deco-sphere" src="img/esfera.webp" alt="">
+    <img class="deco-sphere" src="esfera.webp" alt="">
     <h3>⏱️ Tiempo de mandato cumplido</h3>
     <p class="muted small" style="margin:0">Cuenta progresiva desde el ${fechaLarga(MANDATO.inicio)}</p>
     ${contadorHTML('lleva')}
@@ -630,7 +630,7 @@ V.perfil = () => {
   }
   return `
   ${volver('#/elysia', 'Elysia')}
-  <div class="photo-strip" style="--img:url(img/perfil.webp)"><span>Cada 4 años elegimos el rumbo de Elysia</span></div>
+  <div class="photo-strip" style="--img:url(perfil.webp)"><span>Cada 4 años elegimos el rumbo de Elysia</span></div>
   <div class="section-title"><h2>🗳️ Elección del Perfil Programático</h2></div>
   ${DEMO}
   <p class="muted" style="margin:0 2px">Cada 4 años la ciudadanía elige el programa que define las prioridades de Elysia. Próxima elección: <b>${fechaCorta(MANDATO.fin)} ${MANDATO.fin.getFullYear()}</b>.</p>
@@ -669,7 +669,7 @@ V.prisma = () => {
   const r = rng('bitacora');
   const acciones = ['Auditó el informe de impacto sobre la Ley de Transporte Nocturno', 'Revisó las detecciones de Elysia en Piastri', 'Publicó el análisis de sesgos de clasificación', 'Verificó la firma de 3 custodios en una actualización de Elysia', 'Auditó el escrutinio de la consulta sobre bibliotecas', 'Recibió 12 temas propuestos por el panel ciudadano'];
   return `
-  <section class="glass hero photo-bg" style="padding-top:20px;--img:url(img/prisma.webp)"><div class="orb lg" style="--c:#6a3fb8;margin:0 auto">🔷</div><h1 style="font-size:26px">Prisma</h1>
+  <section class="glass hero photo-bg" style="padding-top:20px;--img:url(prisma.webp)"><div class="orb lg" style="--c:#6a3fb8;margin:0 auto">🔷</div><h1 style="font-size:26px">Prisma</h1>
     <p class="sub">Órgano independiente de auditoría. Regula y audita Ágora, las cuentas públicas, el cumplimiento de las leyes por parte de los nodos y el funcionamiento de Elysia.</p></section>
   <div class="glass"><h3>👥 Composición</h3><ul class="list-check">
     <li>9 auditores con mandato único de 6 años: 3 por concurso técnico, 3 propuestos por la oposición y 3 por el Consejo Federal.</li>
@@ -686,7 +686,7 @@ V.prisma = () => {
 };
 
 V.acerca = () => `
-  <div class="photo-strip" style="--img:url(img/acerca.webp)"><span>Hecho con nostalgia de los 2000</span></div>
+  <div class="photo-strip" style="--img:url(acerca.webp)"><span>Hecho con nostalgia de los 2000</span></div>
   <div class="section-title"><h2>ℹ️ Sobre esta demo</h2></div>
   <div class="glass">
     <p><b>Ágora</b> es una demostración educativa creada para un trabajo práctico sobre formas de gobierno. Muestra cómo podría funcionar la participación ciudadana en la <b>Lumencracia</b>, una forma de gobierno democrática ficticia.</p>
@@ -710,7 +710,7 @@ function noEncontrado() { return `${volver('#/')}<div class="glass empty-note">N
 function renderDrawer(ruta) {
   const it = (href, ico, txt, key) => `<a href="${href}" class="${ruta === key ? 'on' : ''}"><span class="ico">${ico}</span>${txt}</a>`;
   $('#drawer').innerHTML = `
-    <div class="dhead"><img src="icons/logo.svg" width="40" height="40" alt=""><b>Ágora</b><button class="icon-btn" data-act="cerrar-menu" aria-label="Cerrar menú">✕</button></div>
+    <div class="dhead"><img src="logo.svg" width="40" height="40" alt=""><b>Ágora</b><button class="icon-btn" data-act="cerrar-menu" aria-label="Cerrar menú">✕</button></div>
     <a class="glass tight item" href="#/elysia" style="display:block;margin:0 0 12px">
       <div class="small"><b>✨ Elysia</b> · mandato ${MANDATO.inicio.getFullYear()}–${MANDATO.fin.getFullYear()}</div>
       <div class="small muted">Quedan <span data-resta-txt>${textoResta()}</span></div>
