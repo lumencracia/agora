@@ -443,3 +443,25 @@ footer.foot .prisma { display: inline-flex; gap: 6px; align-items: center; font-
 @keyframes pop { 0% { transform: scale(1); opacity: 1; } 60% { transform: scale(1.35); opacity: .6; } 100% { transform: scale(1.6); opacity: 0; } }
 
 a.chip { text-decoration: none; display: inline-block; }
+
+/* Reproductor de música flotante */
+#musica { position: fixed; z-index: 30; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+.music-btn {
+  display: flex; align-items: center; gap: 6px; font: 700 13.5px var(--font); color: #05565b; cursor: pointer;
+  padding: 10px 14px; border-radius: 999px; border: 1px solid var(--turq-d);
+  background: linear-gradient(180deg, #ffffff 0%, #d9f6fa 48%, #A8E7F7 52%, #e6fbfd 100%);
+  box-shadow: 0 6px 18px rgba(0,92,122,.3), inset 0 1px 0 #fff;
+}
+.music-card {
+  width: 236px; padding: 10px; border-radius: 20px; border: 1px solid #fff;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(220,247,252,.88));
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 10px 28px rgba(0,92,122,.3);
+}
+.music-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 13px; color: var(--ink); line-height: 1.25; }
+.music-head .icon-btn { width: 34px; height: 34px; flex: none; }
+.music-card iframe { display: block; width: 216px; height: 200px; border: 0; border-radius: 12px; background: #000; }
+footer.foot { padding-bottom: 64px; }
+.music-ctrl { display: flex; gap: 6px; }
+.music-card.min { width: 220px; }
+.music-card.min .music-head { margin-bottom: 0; }
+.music-card.min iframe { height: 1px; width: 1px; opacity: 0; position: absolute; pointer-events: none; }
